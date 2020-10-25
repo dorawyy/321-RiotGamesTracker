@@ -74,7 +74,7 @@ app.get('/param', (req, res) => {
 
 app.get('/summoner', (req, res) => {
  
-    var dataToSend;
+    var dataToSend = "";
 
     let name = req.query.name
 
