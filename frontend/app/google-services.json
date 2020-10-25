@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1015631713876",
+    "firebase_url": "https://riot-games-tracker.firebaseio.com",
+    "project_id": "riot-games-tracker",
+    "storage_bucket": "riot-games-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015631713876:android:972c6b185d045300507fc1",
+        "android_client_info": {
+          "package_name": "com.example.riotgamestracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015631713876-n9vrpuf8mhoggns9nj0v0binmluuse9q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ6Le5EOqeL0wtA4J2sgfxYY8BYtYbvNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015631713876-n9vrpuf8mhoggns9nj0v0binmluuse9q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
