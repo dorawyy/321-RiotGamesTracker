@@ -1,9 +1,36 @@
 const express = require('express');
 const {spawn} = require('child_process');
+const mongoose = require('mongoose');
 
+// create data schema and model
+const Schema = mongoose.Schema;
+const PlayerSchema = new Schema(
+    {
+        participantID: {type:String},
+        teamId: {type:Number},
+        champion: {type:String},
+        summonerSpell1: {type:String},
+        summonerSpell2: {type:String},
+        win: {type:Number},
+        kills: {type:Number},
+        deaths: {type:Number},
+        assists: {type:Number},
+        totalDamageDealt: {type:Number},
+        goldEarned: {type:Number},
+        champLevel: {type:Number},
+        totalMinionsKilled: {type:Number},
+        item0: {type:String},
+        item1: {type:String}
+    }
+);
 
+const Player = mongoose.model('Players', PlayerSchema);
 
+// setup express app
 const app = express();
+// connect to mongoDB
+mongoose.connect('mongodb://localhost:27017/RiotTrackerDB',{ useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.Promise = global.Promise;
 
 app.use(express.json());
 
@@ -38,7 +65,6 @@ app.get('/hello', (req, res) => {
         // send data to browser
         res.send(dataString)
     });
-
     
     // send data to browser
 })
@@ -47,6 +73,9 @@ app.get('/hello', (req, res) => {
 
 app.get('/param', (req, res) => {
  
+    // Save Player Data in DB
+    Player.create(res);
+
     var dataToSend;
     
     const python = spawn('python', ['PythonCode\\parameters.py', 'hello', 'hello1']);
@@ -68,9 +97,41 @@ app.get('/param', (req, res) => {
         res.send(dataToSend)
     });
 
-    
     // send data to browser
 })
+
+app.get('/summoner', (req, res) => {
+    
+    // Save Player Data in DB
+    Player.create(res);
+
+    var dataToSend = "";
+
+    let name = req.query.name
+
+    const python = spawn('python', ['PythonCode\\SummonerSearchDemo.py', name]);
+
+    // spawn new child process to call the python script
+    // collect data from script
+    python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+        dataToSend += data.toString();
+    });
+    python.stderr.on('data', function (data) {
+        console.log('Python script errored');
+            dataToSend += data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+        // send data to browser
+        res.send(dataToSend)
+    });
+
+
+})
+
+
 
 app.get('/time', (req, res) => {
     res.send(Date());
@@ -85,10 +146,10 @@ function runPython(req, res) {
     var process = spawn('python', [])
 }
 
-var server = app.listen(port, function () {
+var server = app.listen(process.env.port||port, function () {
     var host = server.address().address
     var port = server.address().port
-    console.log("Example app listening at http://%s:%s", host, port)
+    console.log("App listening at http://%s:%s", host, port)
 
 })
 
