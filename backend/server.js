@@ -72,6 +72,38 @@ app.get('/param', (req, res) => {
     // send data to browser
 })
 
+app.get('/summoner', (req, res) => {
+ 
+    var dataToSend;
+
+    let name = req.query.name
+
+
+    const python = spawn('python', ['PythonCode\\SummonerSearchDemo.py']);
+
+    // spawn new child process to call the python script
+    // collect data from script
+    python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+        dataToSend += data.toString();
+    });
+    python.stderr.on('data', function (data) {
+        console.log('Python script errored');
+            dataToSend += data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+        // send data to browser
+        res.send(dataToSend)
+    });
+
+    
+    // send data to browser
+})
+
+
+
 app.get('/time', (req, res) => {
     res.send(Date());
 })
