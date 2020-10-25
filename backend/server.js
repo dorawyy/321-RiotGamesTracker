@@ -78,8 +78,7 @@ app.get('/summoner', (req, res) => {
 
     let name = req.query.name
 
-
-    const python = spawn('python', ['PythonCode\\SummonerSearchDemo.py']);
+    const python = spawn('python', ['PythonCode\\SummonerSearchDemo.py', name]);
 
     // spawn new child process to call the python script
     // collect data from script

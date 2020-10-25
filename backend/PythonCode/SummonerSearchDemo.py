@@ -14,10 +14,11 @@ api_key = "RGAPI-0e99c4af-e2b5-4db2-87cc-843718bb0e7c"
 watcher = LolWatcher(api_key)
 region = "na1"
 
-# name = sys.argv[1]
-# print("Summoner Name = ", name)
+name = sys.argv[1]
+# print("summoner name = ", name)
 
-me = watcher.summoner.by_name(region, "Gunner62")
+me = watcher.summoner.by_name(region, name)
 print(me)
 
 
+    
