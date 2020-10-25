@@ -23,8 +23,8 @@ public class HttpManager {
         queue = Volley.newRequestQueue(context);
     }
 
-    public void getPlayerProfile(String player, final MutableLiveData<JSONObject> data) {
-        String url = serverUrl + "profile?player=" + player;
+    public void getSummoner(String summoner, final MutableLiveData<JSONObject> data) {
+        String url = serverUrl + "summoner?name=" + summoner;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
