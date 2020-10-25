@@ -67,7 +67,7 @@ for key in static_champ_list['data']:
     row = static_champ_list['data'][key]
     champ_dict[row['key']] = row['id']
 for row in participants:
-    print(str(row['champion']) + ' ' + champ_dict[str(row['champion'])])
+    # print(str(row['champion']) + ' ' + champ_dict[str(row['champion'])])
     row['championName'] = champ_dict[str(row['champion'])]
 
 df = pd.DataFrame(participants)
