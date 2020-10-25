@@ -8,9 +8,9 @@ mongoClient.connect(url,{ useUnifiedTopology: true } , function(err, db) {
 
   var dbo = db.db("RiotTrackerDB");
 
-  //dbo.createCollection("Players", function(err, res) {
-    //if (err) throw err;
-    //console.log("Collection created!");
+  dbo.createCollection("Players", function(err, res) {
+    if (err) throw err;
+    console.log("Collection created!");
 
     var myobj = [
         { name: 'John', address: 'Highway 71'},
@@ -35,6 +35,6 @@ mongoClient.connect(url,{ useUnifiedTopology: true } , function(err, db) {
 
   db.close();
     });
-    //});
+    });
 });
 
