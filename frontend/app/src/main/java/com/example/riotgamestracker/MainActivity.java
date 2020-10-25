@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +20,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
-    private MyViewModel model;
 
 
     @Override
@@ -45,31 +47,18 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
+        Bundle temp = new Bundle();
+        temp.putString("blah", "Hello world");
         final TextView textView = (TextView)findViewById(R.id.textView);
-        // Get the ViewModel.
-        model = new ViewModelProvider(this).get(MyViewModel.class);
-
-        // Create the observer which updates the UI.
-//        final Observer<String> nameObserver = new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable final String newName) {
-//                // Update the UI, in this case, a TextView.
-//                textView.setText(newName);
-//            }
-//        };
-
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        model.getCurrentName().observe(this, newName -> {
-            // Update the UI, in this case, a TextView.
-            textView.setText(newName);
-        });
-
     }
 
 
     public void btnClick(View v) {
-        String anotherName = "John Doe";
-        model.getCurrentName().setValue(anotherName);
+//        String anotherName = "John Doe";
+//        model.getCurrentName().setValue(anotherName);
+        Intent myIntent = new Intent(MainActivity.this, SummonerProfileActivity.class);
+        myIntent.putExtra("name", "victor");
+        MainActivity.this.startActivity(myIntent);
     }
 
 }
