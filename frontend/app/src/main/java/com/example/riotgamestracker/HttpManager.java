@@ -28,7 +28,7 @@ public class HttpManager {
     private static HttpManager instance;
     private static Context ctx;
     private RequestQueue queue;
-    private final String serverUrl = "http://10.0.2.2:8081/";
+    private final String serverUrl = "http://52.149.183.181:8081/";
     private final DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(
             10000,
             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
