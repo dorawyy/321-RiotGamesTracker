@@ -164,7 +164,6 @@ admin.initializeApp({
 });
 
 function sendNotification(title, body) {
-    console.log('HERE')
     var message = {
       notification:{
           title:title,
