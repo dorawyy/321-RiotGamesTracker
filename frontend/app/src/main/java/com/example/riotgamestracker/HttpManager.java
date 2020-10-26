@@ -79,6 +79,7 @@ public class HttpManager {
     public void getMatchHistory(String summoner, final MutableLiveData<MatchHistory> data) {
 
         String url = serverUrl + "summoner?name=" + summoner;
+        System.out.println(url);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {

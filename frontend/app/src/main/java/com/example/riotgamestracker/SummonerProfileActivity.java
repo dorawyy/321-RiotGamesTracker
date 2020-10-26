@@ -47,6 +47,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
 
     public void matchHistory(View v) {
         Intent intent = new Intent(SummonerProfileActivity.this, MatchHistoryActivity.class);
+        intent.putExtra("name", summonerViewModel.getSummonerData().getValue().name);
         SummonerProfileActivity.this.startActivity(intent);
     }
 }
