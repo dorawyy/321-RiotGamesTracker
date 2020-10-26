@@ -44,7 +44,21 @@ public class MainActivity extends AppCompatActivity {
                         // Log and toast
 //                        Log.d(TAG, token);
                         System.out.println(token);
-                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        FirebaseMessaging.getInstance().subscribeToTopic("notifications")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = msg = "GREAT SUCCESS";
+                        if (!task.isSuccessful()) {
+                            msg = "NOT SUCCESSFUL";
+                        }
+                        System.out.println(msg);
+//                        Log.d(TAG, msg);
+//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
 
