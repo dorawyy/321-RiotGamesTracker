@@ -156,7 +156,7 @@ var server = app.listen(process.env.port||port, function () {
 var admin = require("firebase-admin");
 
 var path = require('path');
-var serviceAccount = require( path.resolve( __dirname, "riot-games-tracker-firebase-adminsdk-5r6sl-acc118704e.json" ) );
+var serviceAccount = require( path.resolve( __dirname, "riot-games-tracker-firebase-adminsdk-5r6sl-5416f03302.json" ) );
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
