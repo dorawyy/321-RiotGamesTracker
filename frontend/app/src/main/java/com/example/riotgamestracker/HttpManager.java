@@ -7,6 +7,7 @@ import android.util.Pair;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,6 +29,10 @@ public class HttpManager {
     private static Context ctx;
     private RequestQueue queue;
     private final String serverUrl = "http://10.0.2.2:8081/";
+    private final DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(
+            10000,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
     public HttpManager(Context context) {
         queue = Volley.newRequestQueue(context);
@@ -67,6 +72,7 @@ public class HttpManager {
                     }
                 });
 
+        request.setRetryPolicy(retryPolicy);
         queue.add(request);
     }
 
@@ -110,6 +116,7 @@ public class HttpManager {
                     }
                 });
 
+        request.setRetryPolicy(retryPolicy);
         queue.add(request);
     }
 

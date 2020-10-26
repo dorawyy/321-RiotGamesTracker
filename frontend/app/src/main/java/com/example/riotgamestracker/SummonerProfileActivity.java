@@ -14,6 +14,8 @@ import com.example.riotgamestracker.viewmodels.SummonerViewModel;
 public class SummonerProfileActivity extends AppCompatActivity {
     private SummonerViewModel summonerViewModel;
 
+    View summonerProfileView;
+    View summonerProfileSpinner;
     TextView summonerNameText;
     TextView summonerLevelText;
 
@@ -22,6 +24,8 @@ public class SummonerProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summoner_profile);
 
+        summonerProfileView = findViewById(R.id.summonerProfileView);
+        summonerProfileSpinner = findViewById(R.id.summonerProfileSpinner);
         summonerNameText = (TextView)findViewById(R.id.summonerNameText);
         summonerLevelText = (TextView)findViewById(R.id.summonerLevelText);
 
@@ -35,6 +39,9 @@ public class SummonerProfileActivity extends AppCompatActivity {
 //            textView.setText(newName);
             summonerNameText.setText(newData.name);
             summonerLevelText.setText("Level: " + newData.level);
+
+            summonerProfileSpinner.setVisibility(View.GONE);
+            summonerProfileView.setVisibility(View.VISIBLE);
         });
     }
 

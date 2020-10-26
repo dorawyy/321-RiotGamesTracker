@@ -14,8 +14,8 @@ import com.example.riotgamestracker.viewmodels.MatchHistoryViewModel;
 public class MatchHistoryActivity extends AppCompatActivity {
     private MatchHistoryViewModel matchHistoryViewModel;
 
-//    View matchHistoryView;
-//    View matchHistorySpinner;
+    View matchHistoryView;
+    View matchHistorySpinner;
     TextView winnersListText;
     TextView losersListText;
 
@@ -24,8 +24,8 @@ public class MatchHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_history);
 
-//        matchHistoryView = findViewById(R.id.matchHistoryView);
-//        matchHistorySpinner = findViewById(R.id.matchHistorySpinner);
+        matchHistoryView = findViewById(R.id.matchHistoryView);
+        matchHistorySpinner = findViewById(R.id.matchHistorySpinner);
         winnersListText = (TextView)findViewById(R.id.winnersListText);
         losersListText = (TextView)findViewById(R.id.losersListText);
 
@@ -48,8 +48,8 @@ public class MatchHistoryActivity extends AppCompatActivity {
             winnersListText.setText(winnersText);
             losersListText.setText(losersText);
 
-//            matchHistorySpinner.setVisibility(View.GONE);
-//            matchHistoryView.setVisibility(View.VISIBLE);
+            matchHistorySpinner.setVisibility(View.GONE);
+            matchHistoryView.setVisibility(View.VISIBLE);
         });
     }
 }
