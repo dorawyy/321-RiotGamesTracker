@@ -9,7 +9,7 @@ from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 import sys
 
-api_key = "RGAPI-0e99c4af-e2b5-4db2-87cc-843718bb0e7c"
+api_key = "RGAPI-a5f16fd9-3aed-4b69-9aa2-1b01d6c4195c"
 
 watcher = LolWatcher(api_key)
 region = "na1"
@@ -79,7 +79,9 @@ df
 # print(df)
 
 json_df = df.to_json()
+print(f'{{"Summoner":{{"name":"{summoner["name"]}","summonerLevel":"{summoner["summonerLevel"]}"}},"MatchHistory":')
 print(json_df)
+print('}')
 
 mastery = watcher.champion_mastery.by_summoner(region, summoner['id'])
 
