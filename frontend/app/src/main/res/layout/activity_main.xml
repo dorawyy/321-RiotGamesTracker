@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -19,8 +19,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search for summoner"
-            android:layout_marginTop="20dp"
+            android:text="Summoner search"
+            android:fontFamily="sans-serif-black"
+            android:textSize="32dp"
             />
 
         <EditText
@@ -29,7 +30,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="Summoner name"/>
+            android:hint="Summoner name"
+            android:layout_marginTop="20dp"/>
 
         <Button
             android:layout_width="200dp"

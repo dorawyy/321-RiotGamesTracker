@@ -69,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void btnClick(View v) {
         String name = search.getText().toString();
+        if(name.length()==0){
+            return;
+        }
 //        String anotherName = "John Doe";
 //        model.getCurrentName().setValue(anotherName);
         Intent myIntent = new Intent(MainActivity.this, SummonerProfileActivity.class);
