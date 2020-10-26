@@ -25,7 +25,6 @@ public class SummonerProfileActivity extends AppCompatActivity {
 
         Bundle viewModelData = new Bundle();
         viewModelData.putString("name", getIntent().getStringExtra("name"));
-        final TextView textView = (TextView)findViewById(R.id.textView);
         summonerViewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(getApplication(), this, viewModelData)).get(SummonerViewModel.class);
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.

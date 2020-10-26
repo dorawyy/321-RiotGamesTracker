@@ -22,7 +22,7 @@ public class SummonerViewModel extends ViewModel {
 
     private void loadSummonerData(String name) {
         Summoner summoner = new Summoner();
-        summoner.name = "victor";
+        summoner.name = name;
         summoner.level = 123;
         summonerData.postValue(summoner);
     }

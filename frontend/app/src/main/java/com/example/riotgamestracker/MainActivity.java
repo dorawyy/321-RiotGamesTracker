@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
 
+    EditText search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +49,16 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-        Bundle temp = new Bundle();
-        temp.putString("blah", "Hello world");
-        final TextView textView = (TextView)findViewById(R.id.textView);
+        search = (EditText) findViewById(R.id.search);
     }
 
 
     public void btnClick(View v) {
+        String name = search.getText().toString();
 //        String anotherName = "John Doe";
 //        model.getCurrentName().setValue(anotherName);
         Intent myIntent = new Intent(MainActivity.this, SummonerProfileActivity.class);
-        myIntent.putExtra("name", "victor");
+        myIntent.putExtra("name", name);
         MainActivity.this.startActivity(myIntent);
     }
 
