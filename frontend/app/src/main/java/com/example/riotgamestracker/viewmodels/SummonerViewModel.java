@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import com.example.riotgamestracker.HttpManager;
 import com.example.riotgamestracker.models.Summoner;
 
 public class SummonerViewModel extends ViewModel {
@@ -21,10 +22,8 @@ public class SummonerViewModel extends ViewModel {
     }
 
     private void loadSummonerData(String name) {
-        Summoner summoner = new Summoner();
-        summoner.name = name;
-        summoner.level = 123;
-        summonerData.postValue(summoner);
+        HttpManager httpManager = HttpManager.getInstance(null);
+        httpManager.getSummoner(name, summonerData);
     }
 }
 

@@ -24,15 +24,26 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class HttpManager {
+    private static HttpManager instance;
+    private static Context ctx;
     private RequestQueue queue;
-    private final String serverUrl = "http://52.188.54.111:8081/";
+    private final String serverUrl = "http://10.0.2.2:8081/";
 
     public HttpManager(Context context) {
         queue = Volley.newRequestQueue(context);
     }
 
+    public static synchronized HttpManager getInstance(Context context) {
+        if (instance == null) {
+            instance = new HttpManager(context);
+        }
+        return instance;
+    }
+
+
     public void getSummoner(String summoner, final MutableLiveData<Summoner> data) {
         String url = serverUrl + "summoner?name=" + summoner;
+        System.out.println(url);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -67,6 +78,7 @@ public class HttpManager {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        System.out.println(response);
                         MatchHistory matchHistory = new MatchHistory();
                         matchHistory.history = new HashMap<>();
 
@@ -93,6 +105,7 @@ public class HttpManager {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        System.out.println(error);
                         Log.d("Error", "onErrorResponse: " + error.getMessage());
                     }
                 });

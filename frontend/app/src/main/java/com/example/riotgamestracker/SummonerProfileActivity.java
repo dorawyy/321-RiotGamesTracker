@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.riotgamestracker.viewmodels.SummonerViewModel;
@@ -34,5 +36,10 @@ public class SummonerProfileActivity extends AppCompatActivity {
             summonerNameText.setText(newData.name);
             summonerLevelText.setText("Level: " + newData.level);
         });
+    }
+
+    public void matchHistory(View v) {
+        Intent intent = new Intent(SummonerProfileActivity.this, MatchHistoryActivity.class);
+        SummonerProfileActivity.this.startActivity(intent);
     }
 }

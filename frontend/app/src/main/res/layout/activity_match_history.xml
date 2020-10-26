@@ -6,4 +6,55 @@
     android:layout_height="match_parent"
     tools:context=".MatchHistoryActivity">
 
+    <LinearLayout
+        android:id="@+id/matchHistoryView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Winners"
+            android:fontFamily="sans-serif-black"
+            android:textSize="32dp"/>
+
+        <TextView
+            android:id="@+id/winnersListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Losers"
+            android:layout_marginTop="20dp"
+            android:fontFamily="sans-serif-black"
+            android:textSize="32dp"/>
+
+        <TextView
+            android:id="@+id/losersListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"/>
+    </LinearLayout>
+
+<!--    <ProgressBar-->
+<!--        android:id="@+id/matchHistorySpinner"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        />-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

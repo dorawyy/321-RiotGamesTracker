@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        String msg = msg = "GREAT SUCCESS";
+                        String msg = "GREAT SUCCESS";
                         if (!task.isSuccessful()) {
                             msg = "NOT SUCCESSFUL";
                         }
@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         search = (EditText) findViewById(R.id.search);
+
+        HttpManager.getInstance(getApplicationContext());
     }
 
 
