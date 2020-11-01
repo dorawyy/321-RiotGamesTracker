@@ -1,8 +1,8 @@
-language: android
-dist: trusty
-android:
-  before_install:
-    -cd frontend
-  components:
-    -build-tools-29.0.3
-    -android-29
+language: node_js
+node_js:
+  - 12
+before_install:
+  - cd backend
+  - npm update
+install:
+  - npm install
