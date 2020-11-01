@@ -18,6 +18,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
     View summonerProfileSpinner;
     TextView summonerNameText;
     TextView summonerLevelText;
+    TextView summonerErrorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
         summonerProfileSpinner = findViewById(R.id.summonerProfileSpinner);
         summonerNameText = (TextView)findViewById(R.id.summonerNameText);
         summonerLevelText = (TextView)findViewById(R.id.summonerLevelText);
+        summonerErrorText = (TextView)findViewById(R.id.summonerErrorText);
 
         Bundle viewModelData = new Bundle();
         viewModelData.putString("name", getIntent().getStringExtra("name"));
@@ -35,12 +37,18 @@ public class SummonerProfileActivity extends AppCompatActivity {
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         summonerViewModel.getSummonerData().observe(this, newData -> {
-            // Update the UI, in this case, a TextView.
-//            textView.setText(newName);
+            summonerProfileSpinner.setVisibility(View.GONE);
+            if(newData.error){
+                if(newData.errorMessage != null && !newData.errorMessage.isEmpty()){
+                    summonerErrorText.setText(newData.errorMessage);
+                } else {
+                    summonerErrorText.setText("Error loading profile");
+                }
+                summonerErrorText.setVisibility(View.VISIBLE);
+                return;
+            }
             summonerNameText.setText(newData.name);
             summonerLevelText.setText("Level: " + newData.level);
-
-            summonerProfileSpinner.setVisibility(View.GONE);
             summonerProfileView.setVisibility(View.VISIBLE);
         });
     }

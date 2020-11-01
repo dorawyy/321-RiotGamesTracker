@@ -7,4 +7,7 @@ import java.util.Map;
 public class MatchHistory {
     // Index : (Character, win)
     public Map<String, Pair<String, Boolean>> history;
+
+    public boolean error;
+    public String errorMessage;
 }

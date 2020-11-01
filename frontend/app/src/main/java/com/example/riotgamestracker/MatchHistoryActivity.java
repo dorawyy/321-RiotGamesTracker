@@ -18,6 +18,7 @@ public class MatchHistoryActivity extends AppCompatActivity {
     View matchHistorySpinner;
     TextView winnersListText;
     TextView losersListText;
+    TextView matchHistoryErrorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class MatchHistoryActivity extends AppCompatActivity {
         matchHistorySpinner = findViewById(R.id.matchHistorySpinner);
         winnersListText = (TextView)findViewById(R.id.winnersListText);
         losersListText = (TextView)findViewById(R.id.losersListText);
+        matchHistoryErrorText = (TextView)findViewById(R.id.matchHistoryErrorText);
 
         Bundle viewModelData = new Bundle();
         viewModelData.putString("name", getIntent().getStringExtra("name"));
@@ -35,6 +37,17 @@ public class MatchHistoryActivity extends AppCompatActivity {
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         matchHistoryViewModel.getSummonerData().observe(this, newData -> {
+            matchHistorySpinner.setVisibility(View.GONE);
+            if(newData.error){
+                if(newData.errorMessage != null && !newData.errorMessage.isEmpty()){
+                    matchHistoryErrorText.setText(newData.errorMessage);
+                } else {
+                    matchHistoryErrorText.setText("Error loading match history");
+                }
+                matchHistoryErrorText.setVisibility(View.VISIBLE);
+                return;
+            }
+
             String winnersText = "";
             String losersText = "";
             for(String s : newData.history.keySet()){
@@ -48,7 +61,6 @@ public class MatchHistoryActivity extends AppCompatActivity {
             winnersListText.setText(winnersText);
             losersListText.setText(losersText);
 
-            matchHistorySpinner.setVisibility(View.GONE);
             matchHistoryView.setVisibility(View.VISIBLE);
         });
     }

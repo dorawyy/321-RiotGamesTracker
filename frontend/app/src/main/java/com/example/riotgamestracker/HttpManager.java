@@ -62,12 +62,19 @@ public class HttpManager {
                             data.postValue(res);
                         } catch (JSONException exception) {
                             Log.d("Error", "onResponse: " + exception.getMessage());
+                            res.error = true;
+                            res.errorMessage = exception.getMessage();
+                            data.postValue(res);
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Summoner res = new Summoner();
+                        res.error = true;
+                        res.errorMessage = error.getMessage();
+                        data.postValue(res);
                         Log.d("Error", "onErrorResponse: " + error.getMessage());
                     }
                 });
@@ -79,13 +86,11 @@ public class HttpManager {
     public void getMatchHistory(String summoner, final MutableLiveData<MatchHistory> data) {
 
         String url = serverUrl + "summoner?name=" + summoner;
-        System.out.println(url);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        System.out.println(response);
                         MatchHistory matchHistory = new MatchHistory();
                         matchHistory.history = new HashMap<>();
 
@@ -104,6 +109,9 @@ public class HttpManager {
                             data.postValue(matchHistory);
 
                         } catch (JSONException exception) {
+                            matchHistory.error = true;
+                            matchHistory.errorMessage = exception.getMessage();
+                            data.postValue(matchHistory);
                             Log.d("Error", "onResponse: " + exception.getMessage());
                         }
 
@@ -112,7 +120,10 @@ public class HttpManager {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        System.out.println(error);
+                        MatchHistory res = new MatchHistory();
+                        res.error = true;
+                        res.errorMessage = error.getMessage();
+                        data.postValue(res);
                         Log.d("Error", "onErrorResponse: " + error.getMessage());
                     }
                 });
