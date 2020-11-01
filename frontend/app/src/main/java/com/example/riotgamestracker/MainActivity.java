@@ -10,8 +10,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +26,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class MainActivity extends AppCompatActivity {
 
     EditText search;
+    Button searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,27 @@ public class MainActivity extends AppCompatActivity {
 
 
         search = (EditText) findViewById(R.id.search);
+        searchButton = (Button) findViewById(R.id.searchButton);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().trim().length()==0){
+                    searchButton.setEnabled(false);
+                } else {
+                    searchButton.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         HttpManager.getInstance(getApplicationContext());
     }
