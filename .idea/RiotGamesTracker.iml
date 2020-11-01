@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../../RiotGamesTracker/gen" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../../RiotGamesTracker/gen" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../../RiotGamesTracker/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/../../RiotGamesTracker/res" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../../RiotGamesTracker/assets" />
+        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/../../RiotGamesTracker/libs" />
+        <option name="PROGUARD_LOGS_FOLDER_RELATIVE_PATH" value="/../../RiotGamesTracker/proguard_logs" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="jdk" jdkName="Android API 30 Platform" jdkType="Android SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

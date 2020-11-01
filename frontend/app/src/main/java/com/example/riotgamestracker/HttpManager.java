@@ -91,30 +91,10 @@ public class HttpManager {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        MatchHistory matchHistory = new MatchHistory();
+                        MatchHistory matchHistory = new MatchHistory(response);
                         matchHistory.history = new HashMap<>();
 
-                        try {
-                            JSONObject championNames = response.getJSONObject("MatchHistory").getJSONObject("championName");
-                            JSONObject wins = response.getJSONObject("MatchHistory").getJSONObject("win");
-
-                            Iterator<String> indexes = championNames.keys();
-                            while (indexes.hasNext()) {
-                                String index = indexes.next();
-
-                                matchHistory.history.put(index,
-                                        new Pair<>(championNames.getString(index), wins.getBoolean(index)));
-                            }
-
-                            data.postValue(matchHistory);
-
-                        } catch (JSONException exception) {
-                            matchHistory.error = true;
-                            matchHistory.errorMessage = exception.getMessage();
-                            data.postValue(matchHistory);
-                            Log.d("Error", "onResponse: " + exception.getMessage());
-                        }
-
+                        data.postValue(matchHistory);
                     }
                 },
                 new Response.ErrorListener() {
