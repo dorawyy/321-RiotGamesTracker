@@ -6,3 +6,7 @@ before_install:
   - npm update
 install:
   - npm install
+notifications:
+  email:
+    on_success: change
+    on_failure: change
