@@ -24,7 +24,7 @@ app.get('/summoner', (req, res) => {
 
   let name = req.query.name
 
-  const python = spawn('python', ['PythonCode\\SummonerSearchDemo.py', name, "summoner"]);
+  const python = spawn('python', [".\\PythonCode\\SummonerSearchDemo.py", name, "summoner"]);
 
   // spawn new child process to call the python script
   // collect data from script
@@ -54,7 +54,7 @@ app.get('/profile', (req, res) => {
 
     let name = req.query.name
 
-    const python = spawn('python', ['PythonCode\\SummonerSearchDemo.py', name, "profile"]);
+    const python = spawn('python', ['.\\PythonCode\\SummonerSearchDemo.py', name, "profile"]);
 
     // spawn new child process to call the python script
     // collect data from script
