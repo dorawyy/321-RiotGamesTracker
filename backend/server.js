@@ -24,32 +24,6 @@ app.get('/input', (req, res) => {
 
 })
 
-app.get('/hello', (req, res) => {
- 
-    var dataToSend;
-    data = [1,2,3,4,5,6,7,8,9],
-    dataString = '';
-    const python = spawn('python', ['PythonCode\\hello.py']);
-
-
-    // spawn new child process to call the python script
-    // collect data from script
-    python.stdout.on('data', function (data) {
-    console.log('Pipe data from python script ...');
-        dataString += data.toString();
-    });
-    // in close event we are sure that stream from child process is closed
-    python.on('close', (code) => {
-        console.log(`child process close all stdio with code ${code}`);
-        // send data to browser
-        res.send(dataString)
-    });
-    
-    // send data to browser
-})
-
-//Working send to python with parameters
-
 app.get('/param', (req, res) => {
  
     // Save Player Data in DB
@@ -186,5 +160,7 @@ function sendNotification(title, body) {
         console.log('Error sending message:', error);
       });
 }
+
+mongoose.connection.close()
 
 module.exports = app;
