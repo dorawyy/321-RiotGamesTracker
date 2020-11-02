@@ -10,15 +10,6 @@ describe('GET /input', function(){
         })
 })
 
-describe('GET /hello', function(){
-    it('should return successfully', function(done){
-        request(app)
-        .get('/hello')
-        .expect(200)
-        .end(done)
-        })
-})
-
 describe('GET /param', function(){
     it('should return successfully', function(done){
         request(app)
