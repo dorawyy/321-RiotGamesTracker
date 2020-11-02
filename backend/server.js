@@ -186,3 +186,5 @@ function sendNotification(title, body) {
         console.log('Error sending message:', error);
       });
 }
+
+module.exports = app;
