@@ -2,14 +2,14 @@ const express = require('express');
 const {spawn} = require('child_process');
 
 // import Player Schema
-const Player = require('./model/PlayerSchema');
-const mongoose = require('mongoose');
+// const Player = require('./model/PlayerSchema');
+// const mongoose = require('mongoose');
 
 // setup express app
 const app = express();
 // connect to mongoDB
-mongoose.connect('mongodb://localhost:27017/RiotTrackerDB',{ useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.Promise = global.Promise;
+// mongoose.connect('mongodb://localhost:27017/RiotTrackerDB',{ useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.Promise = global.Promise;
 
 app.use(express.json());
 
@@ -18,7 +18,7 @@ const port = 8081;    //8081
 app.get('/summoner', (req, res) => {
     
   // Save Player Data in DB
-  Player.create(res);
+  // Player.create(res);
 
   var dataToSend = "";
 
@@ -48,7 +48,7 @@ app.get('/summoner', (req, res) => {
 app.get('/profile', (req, res) => {
     
     // Save Player Data in DB
-    Player.create(res);
+    // Player.create(res);
 
     var dataToSend = "";
 
@@ -75,12 +75,12 @@ app.get('/profile', (req, res) => {
 
 })
 
-function runPython(req, res) {
+// function runPython(req, res) {
 
-    var spawn = require("child_process").spawn;
+//     var spawn = require("child_process").spawn;
 
-    var process = spawn('python', [])
-}
+//     var process = spawn('python', [])
+// }
 
 var server = app.listen(process.env.port||port, function () {
     var host = server.address().address
@@ -89,35 +89,35 @@ var server = app.listen(process.env.port||port, function () {
 
 })
 
-var admin = require("firebase-admin");
+// var admin = require("firebase-admin");
 
-var path = require('path');
-var serviceAccount = require( path.resolve( __dirname, "riot-games-tracker-firebase-adminsdk-5r6sl-5416f03302.json" ) );
+// var path = require('path');
+// var serviceAccount = require( path.resolve( __dirname, "riot-games-tracker-firebase-adminsdk-5r6sl-5416f03302.json" ) );
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://riot-games-tracker.firebaseio.com"
-});
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://riot-games-tracker.firebaseio.com"
+// });
 
-function sendNotification(title, body) {
-    var message = {
-      notification:{
-          title:title,
-          body:body
-        },
-      topic: "notifications"
-    };
+// function sendNotification(title, body) {
+//     var message = {
+//       notification:{
+//           title:title,
+//           body:body
+//         },
+//       topic: "notifications"
+//     };
 
-    // Send a message to the device corresponding to the provided
-    // registration token.
-    admin.messaging().send(message)
-      .then((response) => {
-        // Response is a message ID string.
-        console.log('Successfully sent message:', response);
-      })
-      .catch((error) => {
-        console.log('Error sending message:', error);
-      });
-}
+//     // Send a message to the device corresponding to the provided
+//     // registration token.
+//     admin.messaging().send(message)
+//       .then((response) => {
+//         // Response is a message ID string.
+//         console.log('Successfully sent message:', response);
+//       })
+//       .catch((error) => {
+//         console.log('Error sending message:', error);
+//       });
+// }
 
 module.exports = app;
