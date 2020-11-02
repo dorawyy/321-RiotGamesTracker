@@ -1,42 +1,20 @@
-const Controller = require('../server');
+const supertest = require('supertest')
+const app = require('../server.js')
+const request = supertest(app)
 
-const getSpy = jest.fn();
-
-jest.doMock('express', () => {
-  return {
-    Router() {
-      return {
-        get: getSpy,
-      }
-    }
-  }
-});
-
-describe('should test router', () => {
-  require('../server.js');
-  test('should test get POSTS', () => {
-    expect(getSpy).toHaveBeenNthCalledWith('/summoner');
-  });
-});
-
-
-/* const express = require('express')
-const app_express = express()
-jest.mock('express');
-
-describe('GET', () => {
+describe('GET', function(){
 
     it('should return successfully', async done =>{
-        
-        const response = {data : {id: 123}}
-        app_express.get.mockResolvedValue(response)
-
-        const app = require('../server.js')
-
-        app.get('/summoner')
+        const response = await request.get('/summoner?name=gunner62')
+        expect(response.status).toBe(200)
         done()
         })
 
-})
+    it('should return successfully', async done =>{
+        const response = await request.get('/profile?name=gunner62')
+        expect(response.status).toBe(200)
+        done()
+        console.log(response)
+        })
 
- */
+})
