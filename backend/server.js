@@ -15,43 +15,6 @@ app.use(express.json());
 
 const port = 8081;
 
-// Champion Name -> req -> 
-
-app.get('/input', (req, res) => {
-    let page = req.query.page;
-
-    res.send(page)
-
-})
-
-app.get('/param', (req, res) => {
- 
-    // Save Player Data in DB
-    Player.create(res);
-
-    var dataToSend;
-    
-    const python = spawn('python', ['PythonCode\\parameters.py', 'hello', 'hello1']);
-
-    // spawn new child process to call the python script
-    // collect data from script
-    python.stdout.on('data', function (data) {
-    console.log('Pipe data from python script ...');
-        dataToSend += data.toString();
-    });
-    python.stderr.on('data', function (data) {
-        console.log('Python script errored');
-            dataToSend += data.toString();
-    });
-    // in close event we are sure that stream from child process is closed
-    python.on('close', (code) => {
-        console.log(`child process close all stdio with code ${code}`);
-        // send data to browser
-        res.send(dataToSend)
-    });
-    // send data to browser
-})
-
 app.get('/summoner', (req, res) => {
     
     // Save Player Data in DB
@@ -112,10 +75,6 @@ app.get('/profile', (req, res) => {
 
 })
 
-app.get('/time', (req, res) => {
-    res.send(Date());
-})
-
 function runPython(req, res) {
 
     var spawn = require("child_process").spawn;
@@ -160,7 +119,5 @@ function sendNotification(title, body) {
         console.log('Error sending message:', error);
       });
 }
-
-mongoose.connection.close()
 
 module.exports = app;
