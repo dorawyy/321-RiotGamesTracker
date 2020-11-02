@@ -7,6 +7,8 @@ describe('GET', function(){
     it('should return successfully', async done =>{
         const response = await request.get('/summoner?name=gunner62')
         expect(response.status).toBe(200)
+        console.log(process.cwd())
+        console.log(response)
         done()
         })
      /*
