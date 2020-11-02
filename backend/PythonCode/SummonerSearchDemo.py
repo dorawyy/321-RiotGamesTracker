@@ -9,21 +9,25 @@ from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 import sys
 
-api_key = "RGAPI-a5f16fd9-3aed-4b69-9aa2-1b01d6c4195c"
+api_key = "RGAPI-aa4f6298-a2a5-4806-9dcd-3863656ff399"
 
 watcher = LolWatcher(api_key)
 region = "na1"
 
 name = sys.argv[1]
+printOption = sys.argv[2]
 # print("summoner name = ", name)
 
 summoner = watcher.summoner.by_name(region, name)
-# print(summoner)
-
+ 
 summoner_ranked_stats = watcher.league.by_summoner(region, summoner['id'])
-# print(summoner_ranked_stats)
+
+if (printOption == "profile"):    
+    print(summoner_ranked_stats)
+
 
 match_history = watcher.match.matchlist_by_account(region, summoner['accountId'])
+# print(match_history['matches'][99])
 
 last_match = match_history['matches'][0]
 
@@ -42,6 +46,7 @@ match_detail = watcher.match.by_id(region, last_match['gameId'])
 
 participants = []
 
+i = 0
 for row in match_detail['participants']:
     participants_row = {}
     participants_row['participantID'] = row['stats']['participantId']
@@ -60,8 +65,18 @@ for row in match_detail['participants']:
     participants_row['totalMinionsKilled'] = row['stats']['totalMinionsKilled']
     participants_row['item0'] = row['stats']['item0']
     participants_row['item1'] = row['stats']['item1']
+    
+    participants_row['SummonerName'] = match_detail['participantIdentities'][i]['player']['summonerName']
+    i = i + 1
+    
     participants.append(participants_row)
-
+    
+# for row in match_detail['participantIdentities']:
+    # print(row)
+    # participants_row = {}
+    # print(row['player']['summonerName'])
+    # participants.append(participants_row)
+    
 latest = watcher.data_dragon.versions_for_region(region)['n']['champion']    
 static_champ_list = watcher.data_dragon.champions(latest, False, "en_US")    
 
@@ -77,11 +92,11 @@ df = pd.DataFrame(participants)
 df
 
 # print(df)
-
-json_df = df.to_json()
-print(f'{{"Summoner":{{"name":"{summoner["name"]}","summonerLevel":"{summoner["summonerLevel"]}"}},"MatchHistory":')
-print(json_df)
-print('}')
+if (printOption == "summoner"):
+    json_df = df.to_json()
+    print(f'{{"Summoner":{{"name":"{summoner["name"]}","summonerLevel":"{summoner["summonerLevel"]}"}},"MatchHistory":')
+    print(json_df)
+    print('}')
 
 mastery = watcher.champion_mastery.by_summoner(region, summoner['id'])
 

@@ -2,7 +2,7 @@ const express = require('express');
 const {spawn} = require('child_process');
 
 // import Player Schema
-const Player = require('/model/PlayerSchema');
+const Player = require('./model/PlayerSchema');
 const mongoose = require('mongoose');
 
 // setup express app
@@ -87,7 +87,37 @@ app.get('/summoner', (req, res) => {
 
     let name = req.query.name
 
-    const python = spawn('python', ['PythonCode\\SummonerSearchDemo.py', name]);
+    const python = spawn('python', ['PythonCode\\SummonerSearchDemo.py', name, "summoner"]);
+
+    // spawn new child process to call the python script
+    // collect data from script
+    python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+        dataToSend += data.toString();
+    });
+    python.stderr.on('data', function (data) {
+        console.log('Python script errored');
+            dataToSend += data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+        // send data to browser
+        res.send(dataToSend)
+    });
+
+})
+
+app.get('/profile', (req, res) => {
+    
+    // Save Player Data in DB
+    Player.create(res);
+
+    var dataToSend = "";
+
+    let name = req.query.name
+
+    const python = spawn('python', ['PythonCode\\SummonerSearchDemo.py', name, "profile"]);
 
     // spawn new child process to call the python script
     // collect data from script
