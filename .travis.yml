@@ -4,6 +4,8 @@ node_js:
 before_install:
   - cd backend
   - npm update
+  - python --version
+  - pip --version
 install:
   - npm install
 notifications:
