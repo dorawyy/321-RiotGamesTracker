@@ -54,7 +54,7 @@ app.get('/profile', (req, res) => {
 
     let name = req.query.name
 
-    const python = spawn('python', ['.\PythonCode\SummonerSearchDemo.py', name, "profile"]);
+    const python = spawn('python', ['./PythonCode/SummonerSearchDemo.py', name, "profile"]);
 
     // spawn new child process to call the python script
     // collect data from script
@@ -82,7 +82,7 @@ app.get('/profile', (req, res) => {
 //     var process = spawn('python', [])
 // }
 
-var server = app.listen(process.env.port||port, function () {
+const server = app.listen(process.env.port||port, function () {
     var host = server.address().address
     var port = server.address().port
     console.log("App listening at http://%s:%s", host, port)
@@ -120,4 +120,4 @@ var server = app.listen(process.env.port||port, function () {
 //       });
 // }
 
-module.exports = app;
+module.exports = server;

@@ -1,23 +1,22 @@
 const supertest = require('supertest')
-const app = require('./server.js')
-const request = supertest(app)
+const server = require('./server.js')
+const request = supertest(server)
 
 describe('GET', function(){
+
+    afterEach(()=> {
+        server.close()
+    });
 
     it('should return successfully', async done =>{
         const response = await request.get('/summoner?name=gunner62')
         expect(response.status).toBe(200)
-        console.log(process.cwd())
-        console.log(response)
         done()
-        })
-     /*
+        });
     it('should return successfully', async done =>{
         const response = await request.get('/profile?name=gunner62')
         expect(response.status).toBe(200)
         done()
-        console.log(response)
-        })
-        */
+        });
 
 })
