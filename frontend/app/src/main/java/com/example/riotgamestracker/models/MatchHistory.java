@@ -21,18 +21,20 @@ public class MatchHistory {
     private JSONObject histJson;
     private int size;
 
-    public MatchHistory(){
-
+    public MatchHistory(String errorMessage){
+        this.error = true;
+        this.errorMessage = errorMessage;
     }
 
     public MatchHistory(JSONObject histJson) {
         this.history = new HashMap<>();
+        this.error = false;
 
         try {
             this.histJson = histJson.getJSONObject("MatchHistory");
 
-            JSONObject championNames = histJson.getJSONObject("championName");
-            JSONObject wins = histJson.getJSONObject("win");
+            JSONObject championNames = this.histJson.getJSONObject("championName");
+            JSONObject wins = this.histJson.getJSONObject("win");
 
             Iterator<String> indexes = championNames.keys();
             this.size = 0;
@@ -44,7 +46,10 @@ public class MatchHistory {
             }
 
         } catch (JSONException exception) {
-            Log.d("Error", "onResponse: " + exception.getMessage());
+            this.error = true;
+            this.errorMessage = exception.getMessage();
+
+            Log.d("Error", "MatchHistory: " + exception.getMessage());
         }
     }
 

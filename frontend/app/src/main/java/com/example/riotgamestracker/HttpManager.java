@@ -92,7 +92,6 @@ public class HttpManager {
                     @Override
                     public void onResponse(JSONObject response) {
                         MatchHistory matchHistory = new MatchHistory(response);
-                        matchHistory.history = new HashMap<>();
 
                         data.postValue(matchHistory);
                     }
@@ -100,9 +99,7 @@ public class HttpManager {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        MatchHistory res = new MatchHistory();
-                        res.error = true;
-                        res.errorMessage = error.getMessage();
+                        MatchHistory res = new MatchHistory(error.getMessage());
                         data.postValue(res);
                         Log.d("Error", "onErrorResponse: " + error.getMessage());
                     }
