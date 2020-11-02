@@ -4,8 +4,9 @@ node_js:
 before_install:
   - cd backend
   - npm update
-  - python3 --version
-  - pip --version
+  - alias python=python3
+  - pip3 install riotwatcher
+  - pip3 install pandas
 install:
   - npm install
 notifications:
