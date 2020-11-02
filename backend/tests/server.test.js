@@ -1,29 +1,19 @@
-const request = require('supertest')
+const supertest = require('supertest')
 const app = require('../server.js')
+const request = supertest(app)
 
-describe('GET /input', function(){
-    it('should return successfully', function(done){
-        request(app)
-        .get('/input')
-        .expect(200)
-        .end(done)
-        })
-})
+describe('GET', function(){
 
-describe('GET /param', function(){
-    it('should return successfully', function(done){
-        request(app)
-        .get('/param')
-        .expect(200)
-        .end(done)
+    it('should return successfully', async done =>{
+        const response = await request.get('/summoner')
+        expect(response.status).toBe(200)
+        done()
         })
-})
 
-describe('GET /summoner', function(){
-    it('should return successfully', function(done){
-        request(app)
-        .get('/summoner')
-        .expect(200)
-        .end(done)
+    it('should return successfully', async done =>{
+        const response = await request.get('/profile')
+        expect(response.status).toBe(200)
+        done()
         })
+
 })
