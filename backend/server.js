@@ -13,7 +13,7 @@ mongoose.Promise = global.Promise;
 
 app.use(express.json());
 
-const port = 3000;    //8081
+const port = 8081;    //8081
 
 app.get('/summoner', (req, res) => {
     
