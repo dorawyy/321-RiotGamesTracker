@@ -1,15 +1,20 @@
-const request = require('supertest')
-const express = require('express');
-jest.mock('express')
-
+const supertest = require('supertest')
 const server = require('../server.js')
+const request = supertest(server)
+//jest.mock('../server.js')
+
 
 describe('GET /summoner', function(){
-    afterEach(()=> {
-        server.close()
-    });
-    test('Mock GET req', () => {
-        const mockRespond = { data : {
+
+     afterEach(()=> {
+         server.close()
+     });
+
+        test('should return successfully', async done =>{
+
+            jest.setTimeout(10000);
+
+            const Mockresp = {
             participantID: 12,
             teamId: 2,
             champion: "naruto",
@@ -24,9 +29,29 @@ describe('GET /summoner', function(){
             champLevel: 12,
             totalMinionsKilled: 2,
             item0: "katana",
-            item1: "shuriken"}
-        }
-        server.get.mockResolvedValue(mockRespond)
-        request(server).get('/summoner').expect(200)
-        })
+            item1: "shuriken"
+            }
+
+            request.get = jest.fn().mockResolvedValue(Mockresp)
+
+            const response = await request.get('/summoner?name=gunner62')
+            expect(response).toBe(Mockresp);
+            expect(request.get).toHaveBeenCalledTimes(1);
+            done()
+            });
+
+            test('should return successfully', async done =>{
+
+                jest.setTimeout(10000);
+    
+                const Mockresp = {
+                }
+    
+                request.get = jest.fn().mockResolvedValue(Mockresp)
+    
+                const responseProfile = await request.get('/profile?name=gunner62')
+                expect(responseProfile).toBe(Mockresp);
+                expect(request.get).toHaveBeenCalledTimes(1);
+                done()
+                });
 })
