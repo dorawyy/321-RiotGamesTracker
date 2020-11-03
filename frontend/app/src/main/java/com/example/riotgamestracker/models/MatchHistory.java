@@ -6,6 +6,7 @@ import android.util.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,6 +21,10 @@ public class MatchHistory {
 
     private JSONObject histJson;
     private int size;
+
+    private ArrayList<PlayerMatchStats> winners;
+
+    private ArrayList<PlayerMatchStats> losers;
 
     public MatchHistory(String errorMessage){
         this.error = true;
@@ -51,10 +56,39 @@ public class MatchHistory {
 
             Log.d("Error", "MatchHistory: " + exception.getMessage());
         }
+
+        this.winners = new ArrayList<>();
+        this.losers = new ArrayList<>();
+        for(int i=0; i<size(); i++){
+            PlayerMatchStats stats = new PlayerMatchStats();
+
+            stats.character = getCharacter(i);
+            stats.kills = getKills(i);
+            stats.deaths = getDeaths(i);
+            stats.champLevel = getChampLevel(i);
+            stats.damageDealt = getTotalDamageDealt(i);
+            stats.assists = getAssists(i);
+            stats.goldEarned = getGoldEarned(i);
+            stats.won = checkWin(i);
+
+            if(stats.won){
+                winners.add(stats);
+            } else {
+                losers.add(stats);
+            }
+        }
     }
 
     public int size() {
         return this.size;
+    }
+
+    public ArrayList<PlayerMatchStats> getWinners() {
+        return winners;
+    }
+
+    public ArrayList<PlayerMatchStats> getLosers() {
+        return losers;
     }
 
     public String getCharacter(int index) {

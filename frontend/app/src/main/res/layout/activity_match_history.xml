@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MatchHistoryActivity">
 
+
     <LinearLayout
         android:id="@+id/matchHistoryView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="30dp"
         android:visibility="gone"
 
         android:orientation="vertical"
@@ -19,32 +19,12 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Winners"
-            android:fontFamily="sans-serif-black"
-            android:textSize="32dp"/>
-
-        <TextView
-            android:id="@+id/winnersListText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Losers"
-            android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-black"
-            android:textSize="32dp"/>
-
-        <TextView
-            android:id="@+id/losersListText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"/>
+        <ListView
+            android:id="@+id/matchHistoryListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"
+            android:divider="@null"/>
     </LinearLayout>
 
     <ProgressBar
