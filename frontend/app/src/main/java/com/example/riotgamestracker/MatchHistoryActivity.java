@@ -11,12 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.riotgamestracker.models.MatchHistory;
 import com.example.riotgamestracker.models.PlayerMatchStats;
 import com.example.riotgamestracker.viewmodels.MatchHistoryViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -117,8 +119,11 @@ public class MatchHistoryActivity extends AppCompatActivity {
             }
             else if(getItem(position) instanceof PlayerMatchStats){
                 PlayerMatchStats stats = (PlayerMatchStats) getItem(position);
-                System.out.println("CHARACTER " + stats.getCharacter() + " DAMAGE " + stats.getDamageDealt());
+                Picasso.get().load("http://ddragon.leagueoflegends.com/cdn/10.22.1/img/profileicon/588.png").into((ImageView)convertView.findViewById(R.id.matchHistoryIcon));
+
                 ((TextView) convertView.findViewById(R.id.matchHistoryCharacterText)).setText(stats.getCharacter());
+                ((TextView) convertView.findViewById(R.id.matchHistoryLevel)).setText("Level: " + stats.getChampLevel());
+
                 String kda = String.format("%d/%d/%d", stats.getKills(), stats.getDeaths(), stats.getAssists());
                 ((TextView) convertView.findViewById(R.id.matchHistoryKDA)).setText(kda);
                 ((TextView) convertView.findViewById(R.id.matchHistoryDamageDealt)).setText(Integer.toString(stats.getDamageDealt()));
