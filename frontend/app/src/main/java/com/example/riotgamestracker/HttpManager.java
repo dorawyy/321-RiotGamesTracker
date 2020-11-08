@@ -1,9 +1,7 @@
 package com.example.riotgamestracker;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
-import android.util.Pair;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -20,13 +18,8 @@ import com.example.riotgamestracker.models.Summoner;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 public class HttpManager {
     private static HttpManager instance;
-    private static Context ctx;
     private RequestQueue queue;
     private final String serverUrl = "http://52.149.183.181:8081/";
     private final DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(
