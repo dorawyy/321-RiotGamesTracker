@@ -84,6 +84,42 @@ app.get('/profile', (req, res) => {
 
 })
 
+app.get('/recommend', (req, res) => {
+    
+    // Save Player Data in DB
+    // Player.create(res);
+
+    var dataToSend = "";
+
+    let name = req.query.name
+    let searchDepth = req.query.games
+
+    const python = spawn('python', ['./PythonCode/RecommendedChamp.py', name, searchDepth]);
+
+    python.on('error', function (data) {
+        console.log('Python script failed to spawn');
+        dataToSend += ("Error, python script failed to spawn")
+    });
+
+    // spawn new child process to call the python script
+    // collect data from script
+    python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+        dataToSend += data.toString();
+    });
+    python.stderr.on('data', function (data) {
+        console.log('Python script errored');
+            dataToSend += data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+        // send data to browser
+        res.send(dataToSend)
+    });
+
+})
+
 // function runPython(req, res) {
 
 //     var spawn = require("child_process").spawn;
