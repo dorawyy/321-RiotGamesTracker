@@ -9,7 +9,7 @@ from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 import sys
 
-api_key = "RGAPI-aa4f6298-a2a5-4806-9dcd-3863656ff399"
+api_key = "RGAPI-020bc18c-3e8f-40a9-a098-3c30ff9b5bbf"
 
 watcher = LolWatcher(api_key)
 region = "na1"
@@ -19,7 +19,7 @@ printOption = sys.argv[2]
 
 summoner = watcher.summoner.by_name(region, name)
 
-match_history = watcher.match.matchlist_by_account(region, summoner['accountId'])
+match_history = watcher.match.matchlist_by_account(region, summoner['accountId'], begin_index=0, end_index=50)
 
 current_match = match_history['matches'][0]
 match_detail = watcher.match.by_id(region, current_match['gameId'])
@@ -29,5 +29,9 @@ i = 0;
 for match in match_history['matches']:    
     print(match)
     print(i)
-    match_detail = watcher.match.by_id(region, match['gameId'])
+    
+    
+    # match_detail = watcher.match.by_id(region, match['gameId'])
     i = i + 1
+    
+    
