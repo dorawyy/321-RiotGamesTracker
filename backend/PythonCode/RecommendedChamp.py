@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Nov  1 16:13:12 2020
-
-@author: wccha
-"""
-
 from riotwatcher import LolWatcher#, ApiError
 import pandas as pd
 import sys
 import config
-
 
 api_key = config.riot_games_api_key
 
@@ -28,9 +21,8 @@ match_detail = watcher.match.by_id(region, current_match['gameId'])
 print(match_detail)
 
 i = 0;
-for match in match_history['matches']:    
+for match in match_history['matches']:
     print(match)
     print(i)
-    
     # match_detail = watcher.match.by_id(region, match['gameId'])
     i = i + 1

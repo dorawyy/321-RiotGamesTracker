@@ -14,10 +14,10 @@ printOption = sys.argv[2]
 # print("summoner name = ", name)
 
 summoner = watcher.summoner.by_name(region, name)
- 
+
 summoner_ranked_stats = watcher.league.by_summoner(region, summoner['id'])
 
-if (printOption == "profile"):    
+if (printOption == "profile"):
     print(summoner_ranked_stats)
 
 match_history = watcher.match.matchlist_by_account(region, summoner['accountId'])
@@ -69,8 +69,8 @@ for row in match_detail['participants']:
     # participants_row = {}
     # print(row['player']['summonerName'])
     # participants.append(participants_row)
-    
-latest = watcher.data_dragon.versions_for_region(region)['n']['champion']    
+
+latest = watcher.data_dragon.versions_for_region(region)['n']['champion']
 static_champ_list = watcher.data_dragon.champions(latest, False, "en_US")    
 
 champ_dict = {}
@@ -82,7 +82,6 @@ for row in participants:
     row['championName'] = champ_dict[str(row['champion'])]
 
 df = pd.DataFrame(participants)
-df
 
 # print(df)
 if (printOption == "summoner"):
