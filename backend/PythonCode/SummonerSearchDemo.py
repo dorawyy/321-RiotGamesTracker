@@ -8,8 +8,9 @@ Created on Sat Oct 24 19:56:18 2020
 from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 import sys
+import config
 
-api_key = "RGAPI-020bc18c-3e8f-40a9-a098-3c30ff9b5bbf"
+api_key = config.riot_games_api_key
 
 watcher = LolWatcher(api_key)
 region = "na1"
