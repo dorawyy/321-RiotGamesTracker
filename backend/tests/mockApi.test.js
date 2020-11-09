@@ -2,9 +2,12 @@ const request = require('supertest')
 const express = require('express');
 jest.mock('express')
 
-const app = require('../server.js')
+const server = require('../server.js')
 
 describe('GET /summoner', function(){
+    afterEach(()=> {
+        server.close()
+    });
     test('Mock GET req', () => {
         const mockRespond = { data : {
             participantID: 12,
@@ -23,7 +26,7 @@ describe('GET /summoner', function(){
             item0: "katana",
             item1: "shuriken"}
         }
-        app.get.mockResolvedValue(mockRespond)
-        request(app).get('/summoner').expect(200)
+        server.get.mockResolvedValue(mockRespond)
+        request(server).get('/summoner').expect(200)
         })
 })
