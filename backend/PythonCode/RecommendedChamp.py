@@ -44,18 +44,18 @@ for match in match_history['matches']:
     current_player = match_detail['participants'][current_match['ID'] - 1]
     player_stats = current_player['stats']
     current_match['championID'] = current_player['championId']
-    
+
     current_match['win'] = player_stats['win']
     current_match['KDA'] = (player_stats['kills'] + player_stats['assists']) / (player_stats['deaths'] if player_stats['deaths'] != 0 else 1)
     current_match['damageDealt'] = player_stats['totalDamageDealtToChampions']
     current_match['gold'] = player_stats['goldEarned']
-    
+
     # print(current_match['championID'])
-    
+
     # print(current_match['win'])
     i = i + 1
     past_games.append(current_match)
-    
+
 
 champ_dict = {}
 for key in static_champ_list['data']:
@@ -66,7 +66,6 @@ for row in past_games:
         row['championName'] = champ_dict[str(row['championID'])]
         del row['championID']
         del row['ID']
-        
 
 df = pd.DataFrame(past_games)
 

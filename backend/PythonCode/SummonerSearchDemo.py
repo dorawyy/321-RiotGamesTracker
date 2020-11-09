@@ -95,5 +95,5 @@ chests = []
 # for row in mastery['championId']:
 #     print("hello")
 #     chests_row = {}
-    
+
 # print(mastery)
