@@ -6,16 +6,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.riotgamestracker.HttpManager;
 import com.example.riotgamestracker.models.MatchHistory;
-import com.example.riotgamestracker.models.Summoner;
 
 public class MatchHistoryViewModel extends ViewModel {
-    private SavedStateHandle mState;
     private MutableLiveData<MatchHistory> matchHistoryData;
 
     public MatchHistoryViewModel(SavedStateHandle savedStateHandle) {
-        mState = savedStateHandle;
         matchHistoryData = new MutableLiveData<MatchHistory>();
-        loadMatchHistoryData((String) mState.get("name"));
+        loadMatchHistoryData((String) savedStateHandle.get("name"));
     }
 
     public MutableLiveData<MatchHistory> getSummonerData() {
