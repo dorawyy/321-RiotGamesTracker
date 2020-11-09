@@ -5,7 +5,7 @@ Created on Sun Nov  1 16:13:12 2020
 @author: wccha
 """
 
-from riotwatcher import LolWatcher, ApiError
+from riotwatcher import LolWatcher#, ApiError
 import pandas as pd
 import sys
 import config
@@ -32,8 +32,5 @@ for match in match_history['matches']:
     print(match)
     print(i)
     
-    
     # match_detail = watcher.match.by_id(region, match['gameId'])
     i = i + 1
-    
-    

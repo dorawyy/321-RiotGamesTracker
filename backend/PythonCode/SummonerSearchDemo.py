@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Oct 24 19:56:18 2020
-
-@author: wccha
-"""
-
-from riotwatcher import LolWatcher, ApiError
+from riotwatcher import LolWatcher#, ApiError
 import pandas as pd
 import sys
 import config
@@ -26,7 +20,6 @@ summoner_ranked_stats = watcher.league.by_summoner(region, summoner['id'])
 if (printOption == "profile"):    
     print(summoner_ranked_stats)
 
-
 match_history = watcher.match.matchlist_by_account(region, summoner['accountId'])
 # print(match_history['matches'][99])
 
@@ -43,7 +36,6 @@ print(match_detail)
 # previous_match = summoner_match_history['matches'][0]
 
 # match_detail = watcher.match.by_id(region, previous_match['gameId'])
-
 
 participants = []
 
@@ -107,6 +99,4 @@ chests = []
 #     print("hello")
 #     chests_row = {}
     
-    
 # print(mastery)
-    
