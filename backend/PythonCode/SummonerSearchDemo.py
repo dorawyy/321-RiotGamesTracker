@@ -47,7 +47,7 @@ for row in match_detail['participants']:
     participants_row['champion'] = row['championId']
     participants_row['summonerSpell1'] = row['spell1Id']
     participants_row['summonerSpell2'] = row['spell2Id']
-    
+
     participants_row['win'] = row['stats']['win']
     participants_row['kills'] = row['stats']['kills']
     participants_row['deaths'] = row['stats']['deaths']
