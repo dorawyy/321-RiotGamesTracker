@@ -71,7 +71,7 @@ for row in match_detail['participants']:
     # participants.append(participants_row)
 
 latest = watcher.data_dragon.versions_for_region(region)['n']['champion']
-static_champ_list = watcher.data_dragon.champions(latest, False, "en_US")    
+static_champ_list = watcher.data_dragon.champions(latest, False, "en_US")
 
 champ_dict = {}
 for key in static_champ_list['data']:
