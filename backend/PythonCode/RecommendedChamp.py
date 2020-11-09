@@ -37,9 +37,7 @@ for match in match_history['matches']:
     for participant in match_detail['participantIdentities']:
         #Find the participant ID of the user, name should exist since it passed previous calls
         if (participant['player']['summonerName'] == name):
-            
             current_match['ID'] = participant['participantId']
-            
             # print(participant['player']['summonerName'])
             # print(current_match['ID'])
     #Hooray for 1 based indexing
