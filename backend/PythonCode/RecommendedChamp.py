@@ -33,9 +33,9 @@ for match in match_history['matches']:
 
     # print(match)
     match_detail = watcher.match.by_id(region, match['gameId'])
-    
+
     for participant in match_detail['participantIdentities']:
-        #Find the participant ID of the user, name should exist since it passed previous calls 
+        #Find the participant ID of the user, name should exist since it passed previous calls
         if (participant['player']['summonerName'] == name):
             
             current_match['ID'] = participant['participantId']

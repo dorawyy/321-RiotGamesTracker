@@ -58,7 +58,7 @@ for row in match_detail['participants']:
     participants_row['totalMinionsKilled'] = row['stats']['totalMinionsKilled']
     participants_row['item0'] = row['stats']['item0']
     participants_row['item1'] = row['stats']['item1']
-    
+
     participants_row['SummonerName'] = match_detail['participantIdentities'][i]['player']['summonerName']
     i = i + 1
     
