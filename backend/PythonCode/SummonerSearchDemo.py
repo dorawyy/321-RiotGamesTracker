@@ -28,7 +28,7 @@ last_match = match_history['matches'][0]
 match_detail = watcher.match.by_id(region, last_match['gameId'])
 
 # print("Match Detail")
-print(match_detail)
+# print(match_detail)
 
 # summoner_match_history = watcher.match.matchlist_by_account(region, summoner['id'])
 
