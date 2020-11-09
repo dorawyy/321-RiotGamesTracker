@@ -43,7 +43,6 @@ for match in match_history['matches']:
     #Hooray for 1 based indexing
     current_player = match_detail['participants'][current_match['ID'] - 1]
     player_stats = current_player['stats']
-    
     current_match['championID'] = current_player['championId']
     
     current_match['win'] = player_stats['win']

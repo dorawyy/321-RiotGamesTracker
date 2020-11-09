@@ -62,7 +62,6 @@ for row in match_detail['participants']:
     participants_row['SummonerName'] = match_detail['participantIdentities'][i]['player']['summonerName']
     i = i + 1
     participants.append(participants_row)
-    
 # for row in match_detail['participantIdentities']:
     # print(row)
     # participants_row = {}
