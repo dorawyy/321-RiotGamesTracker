@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.riotgamestracker.models.MatchHistory;
 import com.example.riotgamestracker.models.PlayerMatchStats;
 import com.example.riotgamestracker.viewmodels.MatchHistoryViewModel;
 import com.squareup.picasso.Picasso;
@@ -25,9 +23,9 @@ import java.util.ArrayList;
 public class MatchHistoryActivity extends AppCompatActivity {
     private MatchHistoryViewModel matchHistoryViewModel;
 
-    View matchHistoryView;
-    View matchHistorySpinner;
-    TextView matchHistoryErrorText;
+    private View matchHistoryView;
+    private View matchHistorySpinner;
+    private TextView matchHistoryErrorText;
 
     ListView matchHistoryListView;
 
@@ -99,8 +97,10 @@ public class MatchHistoryActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertViewIn, ViewGroup parent) {
             int rowType = getItemViewType(position);
+            View convertView = convertViewIn;
+
             if (convertView == null) {
                 switch (rowType) {
                     case TYPE_HEADER:
@@ -110,6 +110,9 @@ public class MatchHistoryActivity extends AppCompatActivity {
                     case TYPE_ITEM:
                         convertView = LayoutInflater.from(context).
                                 inflate(R.layout.match_history_row_item, parent, false);
+                        break;
+                    default:
+                        // Nothing to do here, move along
                         break;
                 }
             }
