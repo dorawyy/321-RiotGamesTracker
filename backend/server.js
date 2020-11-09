@@ -17,31 +17,35 @@ const port = 8081;    //8081
 
 app.get('/summoner', (req, res) => {
     
-  // Save Player Data in DB
-  // Player.create(res);
+    // Save Player Data in DB
+    // Player.create(res);
 
-  var dataToSend = "";
+    var dataToSend = "";
 
-  let name = req.query.name
+    let name = req.query.name
 
-  const python = spawn('python', ["./PythonCode/SummonerSearchDemo.py", name, "summoner"]);
+    const python = spawn('python', ["./PythonCode/SummonerSearchDemo.py", name, "summoner"]);
 
-  // spawn new child process to call the python script
-  // collect data from script
-  python.stdout.on('data', function (data) {
-  console.log('Pipe data from python script ...');
-      dataToSend += data.toString();
-  });
-  python.stderr.on('data', function (data) {
-      console.log('Python script errored');
-          dataToSend += data.toString();
-  });
-  // in close event we are sure that stream from child process is closed
-  python.on('close', (code) => {
-      console.log(`child process close all stdio with code ${code}`);
-      // send data to browser
-      res.send(dataToSend)
-  });
+    python.on('error', function (data) {
+        console.log('Python script failed to spawn');
+        dataToSend += ("Error, python script failed to spawn")
+    });
+    // spawn new child process to call the python script
+    // collect data from script
+    python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+        dataToSend += data.toString();
+    });
+    python.stderr.on('data', function (data) {
+        console.log('Python script errored');
+            dataToSend += data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+        // send data to browser
+        res.send(dataToSend)
+    });
 
 })
 
@@ -55,6 +59,47 @@ app.get('/profile', (req, res) => {
     let name = req.query.name
 
     const python = spawn('python', ['./PythonCode/SummonerSearchDemo.py', name, "profile"]);
+
+    python.on('error', function (data) {
+        console.log('Python script failed to spawn');
+        dataToSend += ("Error, python script failed to spawn")
+    });
+
+    // spawn new child process to call the python script
+    // collect data from script
+    python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+        dataToSend += data.toString();
+    });
+    python.stderr.on('data', function (data) {
+        console.log('Python script errored');
+            dataToSend += data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+        // send data to browser
+        res.send(dataToSend)
+    });
+
+})
+
+app.get('/recommend', (req, res) => {
+    
+    // Save Player Data in DB
+    // Player.create(res);
+
+    var dataToSend = "";
+
+    let name = req.query.name
+    let searchDepth = req.query.games
+
+    const python = spawn('python', ['./PythonCode/RecommendedChamp.py', name, searchDepth]);
+
+    python.on('error', function (data) {
+        console.log('Python script failed to spawn');
+        dataToSend += ("Error, python script failed to spawn")
+    });
 
     // spawn new child process to call the python script
     // collect data from script

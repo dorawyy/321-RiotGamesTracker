@@ -1,15 +1,29 @@
 package com.example.riotgamestracker.models;
 
+import org.json.JSONObject;
+
 // match stats for a single player
 public class PlayerMatchStats {
-    String character;
-    int kills;
-    int deaths;
-    int champLevel;
-    int damageDealt;
-    int assists;
-    int goldEarned;
-    boolean won;
+    private String character;
+    private int kills;
+    private int deaths;
+    private int champLevel;
+    private int damageDealt;
+    private int assists;
+    private int goldEarned;
+    private boolean won;
+
+    public PlayerMatchStats(String index, JSONObject histJson)
+    {
+        this.character = MatchHistory.getCharacter(index, histJson);
+        this.kills = MatchHistory.getKills(index, histJson);
+        this.deaths = MatchHistory.getDeaths(index, histJson);
+        this.champLevel = MatchHistory.getChampLevel(index, histJson);
+        this.damageDealt = MatchHistory.getTotalDamageDealt(index, histJson);
+        this.assists = MatchHistory.getAssists(index, histJson);
+        this.goldEarned = MatchHistory.getGoldEarned(index, histJson);
+        this.won = MatchHistory.checkWin(index, histJson);
+    }
 
     public String getCharacter() {
         return character;

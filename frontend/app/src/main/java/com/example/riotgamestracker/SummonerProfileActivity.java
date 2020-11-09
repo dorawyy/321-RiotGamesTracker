@@ -14,11 +14,11 @@ import com.example.riotgamestracker.viewmodels.SummonerViewModel;
 public class SummonerProfileActivity extends AppCompatActivity {
     private SummonerViewModel summonerViewModel;
 
-    View summonerProfileView;
-    View summonerProfileSpinner;
-    TextView summonerNameText;
-    TextView summonerLevelText;
-    TextView summonerErrorText;
+    private View summonerProfileView;
+    private View summonerProfileSpinner;
+    private TextView summonerNameText;
+    private TextView summonerLevelText;
+    private TextView summonerErrorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

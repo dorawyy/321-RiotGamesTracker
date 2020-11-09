@@ -1,26 +1,15 @@
 package com.example.riotgamestracker.models;
 
 import android.util.Log;
-import android.util.Pair;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 public class MatchHistory {
-    // Index : (Character, win)
-    @Deprecated
-    public Map<String, Pair<String, Boolean>> history;
-
     public boolean error;
     public String errorMessage;
-
-    private JSONObject histJson;
-    private int size;
 
     private ArrayList<PlayerMatchStats> winners;
 
@@ -31,23 +20,26 @@ public class MatchHistory {
         this.errorMessage = errorMessage;
     }
 
-    public MatchHistory(JSONObject histJson) {
-        this.history = new HashMap<>();
+    public MatchHistory(JSONObject histJsonIn) {
         this.error = false;
 
         try {
-            this.histJson = histJson.getJSONObject("MatchHistory");
+            JSONObject histJson = histJsonIn.getJSONObject("MatchHistory");
 
-            JSONObject championNames = this.histJson.getJSONObject("championName");
-            JSONObject wins = this.histJson.getJSONObject("win");
+            JSONObject championNames = histJson.getJSONObject("championName");
 
             Iterator<String> indexes = championNames.keys();
-            this.size = 0;
+            this.winners = new ArrayList<>();
+            this.losers = new ArrayList<>();
             while (indexes.hasNext()) {
                 String index = indexes.next();
+                PlayerMatchStats stats = new PlayerMatchStats(index, histJson);
 
-                this.history.put(index, new Pair<>(championNames.getString(index), wins.getBoolean(index)));
-                this.size++;
+                if(stats.isWon()){
+                    winners.add(stats);
+                } else {
+                    losers.add(stats);
+                }
             }
 
         } catch (JSONException exception) {
@@ -56,31 +48,6 @@ public class MatchHistory {
 
             Log.d("Error", "MatchHistory: " + exception.getMessage());
         }
-
-        this.winners = new ArrayList<>();
-        this.losers = new ArrayList<>();
-        for(int i=0; i<size(); i++){
-            PlayerMatchStats stats = new PlayerMatchStats();
-
-            stats.character = getCharacter(i);
-            stats.kills = getKills(i);
-            stats.deaths = getDeaths(i);
-            stats.champLevel = getChampLevel(i);
-            stats.damageDealt = getTotalDamageDealt(i);
-            stats.assists = getAssists(i);
-            stats.goldEarned = getGoldEarned(i);
-            stats.won = checkWin(i);
-
-            if(stats.won){
-                winners.add(stats);
-            } else {
-                losers.add(stats);
-            }
-        }
-    }
-
-    public int size() {
-        return this.size;
     }
 
     public ArrayList<PlayerMatchStats> getWinners() {
@@ -91,12 +58,12 @@ public class MatchHistory {
         return losers;
     }
 
-    public String getCharacter(int index) {
+    public static String getCharacter(String index, JSONObject histJson) {
         String retVal = null;
 
-        if (this.histJson != null) {
+        if (histJson != null) {
             try {
-                retVal = this.histJson.getJSONObject("championName").getString(Integer.toString(index));
+                retVal = histJson.getJSONObject("championName").getString(index);
 
             } catch (JSONException exception) {
                 Log.d("Error", "getCharacter: " + exception.getMessage());
@@ -106,12 +73,12 @@ public class MatchHistory {
         return retVal;
     }
 
-    public int getKills(int index) {
+    public static int getKills(String index, JSONObject histJson) {
         int retVal = -1;
 
-        if (this.histJson != null) {
+        if (histJson != null) {
             try {
-                retVal = this.histJson.getJSONObject("kills").getInt(Integer.toString(index));
+                retVal = histJson.getJSONObject("kills").getInt(index);
 
             } catch (JSONException exception) {
                 Log.d("Error", "getKills: " + exception.getMessage());
@@ -121,12 +88,12 @@ public class MatchHistory {
         return retVal;
     }
 
-    public int getDeaths(int index) {
+    public static int getDeaths(String index, JSONObject histJson) {
         int retVal = -1;
 
-        if (this.histJson != null) {
+        if (histJson != null) {
             try {
-                retVal = this.histJson.getJSONObject("deaths").getInt(Integer.toString(index));
+                retVal = histJson.getJSONObject("deaths").getInt(index);
 
             } catch (JSONException exception) {
                 Log.d("Error", "getDeaths: " + exception.getMessage());
@@ -136,12 +103,12 @@ public class MatchHistory {
         return retVal;
     }
 
-    public int getChampLevel(int index) {
+    public static int getChampLevel(String index, JSONObject histJson) {
         int retVal = -1;
 
-        if (this.histJson != null) {
+        if (histJson != null) {
             try {
-                retVal = this.histJson.getJSONObject("champLevel").getInt(Integer.toString(index));
+                retVal = histJson.getJSONObject("champLevel").getInt(index);
 
             } catch (JSONException exception) {
                 Log.d("Error", "getChampLevel: " + exception.getMessage());
@@ -151,12 +118,12 @@ public class MatchHistory {
         return retVal;
     }
 
-    public int getTotalDamageDealt(int index) {
+    public static int getTotalDamageDealt(String index, JSONObject histJson) {
         int retVal = -1;
 
-        if (this.histJson != null) {
+        if (histJson != null) {
             try {
-                retVal = this.histJson.getJSONObject("totalDamageDealt").getInt(Integer.toString(index));
+                retVal = histJson.getJSONObject("totalDamageDealt").getInt(index);
 
             } catch (JSONException exception) {
                 Log.d("Error", "getTotalDamageDealt: " + exception.getMessage());
@@ -166,12 +133,12 @@ public class MatchHistory {
         return retVal;
     }
 
-    public int getAssists(int index) {
+    public static int getAssists(String index, JSONObject histJson) {
         int retVal = -1;
 
-        if (this.histJson != null) {
+        if (histJson != null) {
             try {
-                retVal = this.histJson.getJSONObject("assists").getInt(Integer.toString(index));
+                retVal = histJson.getJSONObject("assists").getInt(index);
 
             } catch (JSONException exception) {
                 Log.d("Error", "getAssists: " + exception.getMessage());
@@ -181,12 +148,12 @@ public class MatchHistory {
         return retVal;
     }
 
-    public int getGoldEarned(int index) {
+    public static int getGoldEarned(String index, JSONObject histJson) {
         int retVal = -1;
 
-        if (this.histJson != null) {
+        if (histJson != null) {
             try {
-                retVal = this.histJson.getJSONObject("goldEarned").getInt(Integer.toString(index));
+                retVal = histJson.getJSONObject("goldEarned").getInt(index);
 
             } catch (JSONException exception) {
                 Log.d("Error", "getGoldEarned: " + exception.getMessage());
@@ -196,12 +163,12 @@ public class MatchHistory {
         return retVal;
     }
 
-    public Boolean checkWin(int index) {
+    public static Boolean checkWin(String index, JSONObject histJson) {
         Boolean retVal = null;
 
-        if (this.histJson != null) {
+        if (histJson != null) {
             try {
-                retVal = this.histJson.getJSONObject("win").getBoolean(Integer.toString(index));
+                retVal = histJson.getJSONObject("win").getBoolean(index);
 
             } catch (JSONException exception) {
                 Log.d("Error", "checkWin: " + exception.getMessage());

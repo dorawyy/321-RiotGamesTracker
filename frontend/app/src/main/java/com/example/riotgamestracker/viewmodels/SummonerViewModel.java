@@ -8,13 +8,11 @@ import com.example.riotgamestracker.HttpManager;
 import com.example.riotgamestracker.models.Summoner;
 
 public class SummonerViewModel extends ViewModel {
-    private SavedStateHandle mState;
     private MutableLiveData<Summoner> summonerData;
 
     public SummonerViewModel(SavedStateHandle savedStateHandle) {
-        mState = savedStateHandle;
         summonerData = new MutableLiveData<Summoner>();
-        loadSummonerData((String) mState.get("name"));
+        loadSummonerData((String) savedStateHandle.get("name"));
     }
 
     public MutableLiveData<Summoner> getSummonerData() {

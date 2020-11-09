@@ -10,7 +10,7 @@ describe('GET /summoner', function(){
          server.close()
      });
 
-        test('should return successfully', async done =>{
+        test('Summoner', async done =>{
 
             jest.setTimeout(10000);
 
@@ -40,17 +40,19 @@ describe('GET /summoner', function(){
             done()
             });
 
-            test('should return successfully', async done =>{
+            test('Profile', async done =>{
 
                 jest.setTimeout(10000);
     
                 const Mockresp = {
+                    status:404
                 }
     
                 request.get = jest.fn().mockResolvedValue(Mockresp)
     
                 const responseProfile = await request.get('/profile?name=gunner62')
                 expect(responseProfile).toBe(Mockresp);
+                expect(responseProfile.status).toBe(404);
                 expect(request.get).toHaveBeenCalledTimes(1);
                 done()
                 });
