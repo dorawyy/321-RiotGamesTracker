@@ -12,6 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.riotgamestracker.models.DataWrapper;
 import com.example.riotgamestracker.models.MatchHistory;
 import com.example.riotgamestracker.models.Summoner;
 
@@ -120,7 +121,7 @@ public class HttpManager {
         queue.add(request);
     }
 
-    public void follow(String summoner, final MutableLiveData<Boolean> following){
+    public void follow(String summoner, final MutableLiveData<DataWrapper<Boolean>> following){
         String url = serverUrl + "follow?name=" + summoner;
 
         JSONObject body = new JSONObject();
@@ -128,6 +129,7 @@ public class HttpManager {
             body.put("device", "TOKENNAME");
         } catch (JSONException e) {
             e.printStackTrace();
+            following.postValue(new DataWrapper<>(false, e.getMessage()));
             return;
         }
 
@@ -140,19 +142,18 @@ public class HttpManager {
             @Override
             public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-                    Headers responseHeaders = response.headers();
-                    for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                        System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                    if (!response.isSuccessful()){
+                        following.postValue(new DataWrapper<>(false, response.message()));
+                        return;
                     }
 
-                    System.out.println(responseBody.string());
+                    following.postValue(new DataWrapper<>(true, null));
                 }
             }
 
             @Override public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
+                following.postValue(new DataWrapper<>(false, e.getMessage()));
             }
         });
     }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.riotgamestracker.viewmodels.SummonerViewModel;
 
@@ -35,6 +36,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
         viewModelData.putString("name", getIntent().getStringExtra("name"));
         summonerViewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(getApplication(), this, viewModelData)).get(SummonerViewModel.class);
 
+        summonerViewModel.follow();
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         summonerViewModel.getSummonerData().observe(this, newData -> {
             summonerProfileSpinner.setVisibility(View.GONE);
@@ -50,6 +52,14 @@ public class SummonerProfileActivity extends AppCompatActivity {
             summonerNameText.setText(newData.name);
             summonerLevelText.setText("Level: " + newData.level);
             summonerProfileView.setVisibility(View.VISIBLE);
+        });
+
+        summonerViewModel.getFollowing().observe(this, newData -> {
+            if(newData.getError() != null && !newData.getError().isEmpty()){
+
+            } else {
+
+            }
         });
     }
 
