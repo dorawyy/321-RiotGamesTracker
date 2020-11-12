@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.M5VictorHyde" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.M5VictorHyde" parent="Theme.MaterialComponents">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/black</item>
