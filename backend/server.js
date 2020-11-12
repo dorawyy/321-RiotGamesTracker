@@ -120,6 +120,21 @@ app.get('/recommend', (req, res) => {
 
 })
 
+app.post('/follow', (req, res) => {
+    
+    // Save Player Data in DB
+    // Player.create(res);
+
+    var dataToSend = "";
+
+    let name = req.query.name
+
+    console.log("FOLLOWING ", name);
+    console.log("BODY: ", req.body);
+    res.send("FOLLWING");
+
+})
+
 // function runPython(req, res) {
 
 //     var spawn = require("child_process").spawn;

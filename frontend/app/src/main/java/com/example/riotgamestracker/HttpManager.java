@@ -15,10 +15,25 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.riotgamestracker.models.MatchHistory;
 import com.example.riotgamestracker.models.Summoner;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+
 public class HttpManager {
+    public static final MediaType MEDIA_TYPE_JSON
+            = MediaType.parse("application/json; charset=utf-8");
+
     private static HttpManager instance;
     private RequestQueue queue;
     private final String serverUrl = "http://52.149.183.181:8081/";
@@ -27,8 +42,11 @@ public class HttpManager {
             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
+    private OkHttpClient client;
+
     public HttpManager(Context context) {
         queue = Volley.newRequestQueue(context);
+        client = new OkHttpClient();
     }
 
     public static synchronized HttpManager getInstance(Context context) {
@@ -100,6 +118,43 @@ public class HttpManager {
 
         request.setRetryPolicy(retryPolicy);
         queue.add(request);
+    }
+
+    public void follow(String summoner, final MutableLiveData<Boolean> following){
+        String url = serverUrl + "follow?name=" + summoner;
+
+        JSONObject body = new JSONObject();
+        try {
+            body.put("device", "TOKENNAME");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(url)
+                .post(RequestBody.create(body.toString(), MEDIA_TYPE_JSON))
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    Headers responseHeaders = response.headers();
+                    for (int i = 0, size = responseHeaders.size(); i < size; i++) {
+                        System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                    }
+
+                    System.out.println(responseBody.string());
+                }
+            }
+
+            @Override public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }

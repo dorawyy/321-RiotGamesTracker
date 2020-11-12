@@ -9,19 +9,26 @@ import com.example.riotgamestracker.models.Summoner;
 
 public class SummonerViewModel extends ViewModel {
     private MutableLiveData<Summoner> summonerData;
+    private String name;
 
     public SummonerViewModel(SavedStateHandle savedStateHandle) {
         summonerData = new MutableLiveData<Summoner>();
-        loadSummonerData((String) savedStateHandle.get("name"));
+        name = (String) savedStateHandle.get("name");
+        loadSummonerData();
     }
 
     public MutableLiveData<Summoner> getSummonerData() {
         return summonerData;
     }
 
-    private void loadSummonerData(String name) {
+    private void loadSummonerData() {
         HttpManager httpManager = HttpManager.getInstance(null);
         httpManager.getSummoner(name, summonerData);
+    }
+
+    public void follow() {
+        HttpManager httpManager = HttpManager.getInstance(null);
+        httpManager.follow(name, null);
     }
 }
 
