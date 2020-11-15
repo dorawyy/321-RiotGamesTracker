@@ -14,6 +14,7 @@ const app = express();
 app.use(express.json());
 
 const port = 8081;    //8081
+const checkActiveGamesInterval = 1500;
 
 app.get('/summoner', (req, res) => {
     
@@ -128,12 +129,19 @@ app.post('/follow', (req, res) => {
     var dataToSend = "";
 
     let name = req.query.name
+    let deviceId = req.body.device
 
     console.log("FOLLOWING ", name);
-    console.log("BODY: ", req.body);
+    console.log("device: ", deviceId);
     res.send("FOLLWING");
 
 })
+
+function checkActiveGames(){
+    
+}
+
+setInterval(checkActiveGames, checkActiveGamesInterval);
 
 // function runPython(req, res) {
 
