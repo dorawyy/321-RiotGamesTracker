@@ -33,9 +33,9 @@ public class SummonerViewModel extends ViewModel {
         httpManager.getSummoner(name, summonerData);
     }
 
-    public void follow() {
+    public void follow(String deviceId) {
         HttpManager httpManager = HttpManager.getInstance(null);
-        httpManager.follow(name, following);
+        httpManager.follow(name, deviceId, following);
     }
 }
 

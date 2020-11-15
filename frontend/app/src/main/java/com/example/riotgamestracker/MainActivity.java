@@ -3,7 +3,9 @@ package com.example.riotgamestracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,8 +41,13 @@ public class MainActivity extends AppCompatActivity {
 
                         // Log and toast
 //                        Log.d(TAG, token);
-                        System.out.println(token);
-//                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                        System.out.println("FCM TOKEN " + token);
+                        Context context = getApplicationContext();
+                        SharedPreferences sharedPref = context.getSharedPreferences(
+                                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString(getString(R.string.fcm_token_key), token);
+                        editor.apply();
                     }
                 });
 

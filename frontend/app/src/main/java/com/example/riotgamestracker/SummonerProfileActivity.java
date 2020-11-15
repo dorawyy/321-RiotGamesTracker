@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -36,7 +38,11 @@ public class SummonerProfileActivity extends AppCompatActivity {
         viewModelData.putString("name", getIntent().getStringExtra("name"));
         summonerViewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(getApplication(), this, viewModelData)).get(SummonerViewModel.class);
 
-        summonerViewModel.follow();
+        Context context = getApplicationContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String deviceId = sharedPref.getString(getString(R.string.fcm_token_key), "");
+        summonerViewModel.follow(deviceId);
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         summonerViewModel.getSummonerData().observe(this, newData -> {
             summonerProfileSpinner.setVisibility(View.GONE);

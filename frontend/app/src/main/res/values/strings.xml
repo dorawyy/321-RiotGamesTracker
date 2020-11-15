@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RiotGamesTracker</string>
+    <string name="preference_file_key">com.example.riotgamestracker.PREFERENCES</string>
+    <string name="fcm_token_key">fcm_token_key</string>
 </resources>

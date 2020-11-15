@@ -121,12 +121,12 @@ public class HttpManager {
         queue.add(request);
     }
 
-    public void follow(String summoner, final MutableLiveData<DataWrapper<Boolean>> following){
+    public void follow(String summoner, String deviceId, final MutableLiveData<DataWrapper<Boolean>> following){
         String url = serverUrl + "follow?name=" + summoner;
 
         JSONObject body = new JSONObject();
         try {
-            body.put("device", "TOKENNAME");
+            body.put("device", deviceId);
         } catch (JSONException e) {
             e.printStackTrace();
             following.postValue(new DataWrapper<>(false, e.getMessage()));
