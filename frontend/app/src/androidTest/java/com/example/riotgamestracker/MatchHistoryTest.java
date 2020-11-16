@@ -30,13 +30,16 @@ import static org.hamcrest.Matchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 public class MatchHistoryTest {
+    private final String USER_ID_WITH_HISTORY_STRING = "Gunner62";
+    private final String NEW_USER_ID_STRING = "new user";
+
     @Rule
     public ActivityScenarioRule<MainActivity> mainActivityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void summonerSearchTest() {
-        onView(withId(R.id.search)).perform(typeText("Gunner62"));
+    public void matchHistoryTest() {
+        onView(withId(R.id.search)).perform(typeText(USER_ID_WITH_HISTORY_STRING));
         onView(withId(R.id.searchButton)).perform(click());
         onView(withId(R.id.summonerProfileSpinner)).check(matches(isDisplayed()));
         try {
@@ -44,7 +47,7 @@ public class MatchHistoryTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        onView(withId(R.id.summonerNameText)).check(matches(withText("Gunner62")));
+        onView(withId(R.id.summonerNameText)).check(matches(withText(USER_ID_WITH_HISTORY_STRING)));
         onView(withId(R.id.summonerLastMatchButton)).perform(click());
         onView(withId(R.id.matchHistorySpinner)).check(matches(isDisplayed()));
         try {
@@ -58,6 +61,27 @@ public class MatchHistoryTest {
         onData(anything()).inAdapterView(withId(R.id.matchHistoryListView)).atPosition(6).
                 onChildView(withId(R.id.matchHistoryHeaderText)).
                 check(matches(withText("Losers")));
+    }
+
+    @Test
+    public void matchHistoryNewUserTest() {
+        onView(withId(R.id.search)).perform(typeText(NEW_USER_ID_STRING));
+        onView(withId(R.id.searchButton)).perform(click());
+        onView(withId(R.id.summonerProfileSpinner)).check(matches(isDisplayed()));
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.summonerNameText)).check(matches(withText(NEW_USER_ID_STRING)));
+        onView(withId(R.id.summonerLastMatchButton)).perform(click());
+        onView(withId(R.id.matchHistorySpinner)).check(matches(isDisplayed()));
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.matchHistoryErrorText)).check(matches(withText(NEW_USER_ID_STRING + " has not played any matches yet")));
     }
 
 }

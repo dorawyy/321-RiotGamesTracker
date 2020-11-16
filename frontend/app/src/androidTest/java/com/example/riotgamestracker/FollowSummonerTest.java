@@ -8,10 +8,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
@@ -22,16 +24,14 @@ import static org.hamcrest.Matchers.not;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class SummonerSearchTest {
+public class FollowSummonerTest {
     private final String REAL_USER_ID_STRING = "Gunner62";
-    private final String FAKE_USER_ID_STRING = "fake user";
-
     @Rule
-    public ActivityScenarioRule<MainActivity> mainActivityRule =
+    public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void summonerSearchTest() {
+    public void followSummonerTest() {
         onView(withId(R.id.search)).perform(typeText(REAL_USER_ID_STRING));
         onView(withId(R.id.searchButton)).perform(click());
         onView(withId(R.id.summonerProfileSpinner)).check(matches(isDisplayed()));
@@ -41,11 +41,14 @@ public class SummonerSearchTest {
             e.printStackTrace();
         }
         onView(withId(R.id.summonerNameText)).check(matches(withText(REAL_USER_ID_STRING)));
+        onView(withId(R.id.summonerFollowButton)).check(matches(withText("Follow")));
+        onView(withId(R.id.summonerFollowButton)).perform(click());
+        onView(withId(R.id.summonerFollowButton)).check(matches(withText("Unfollow")));
     }
 
     @Test
-    public void summonerSearchNotFoundTest() {
-        onView(withId(R.id.search)).perform(typeText(FAKE_USER_ID_STRING));
+    public void unfollowSummonerTest() {
+        onView(withId(R.id.search)).perform(typeText(REAL_USER_ID_STRING));
         onView(withId(R.id.searchButton)).perform(click());
         onView(withId(R.id.summonerProfileSpinner)).check(matches(isDisplayed()));
         try {
@@ -53,6 +56,23 @@ public class SummonerSearchTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        onView(withId(R.id.summonerErrorText)).check(matches(withText("Summoner not found")));
+        onView(withId(R.id.summonerNameText)).check(matches(withText(REAL_USER_ID_STRING)));
+        onView(withId(R.id.summonerFollowButton)).check(matches(withText("Follow")));
+        onView(withId(R.id.summonerFollowButton)).perform(click());
+        onView(withId(R.id.summonerFollowButton)).check(matches(withText("Unfollow")));
+        pressBack();
+        onView(withId(R.id.search)).perform(typeText(REAL_USER_ID_STRING));
+        onView(withId(R.id.searchButton)).perform(click());
+        onView(withId(R.id.summonerProfileSpinner)).check(matches(isDisplayed()));
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.summonerNameText)).check(matches(withText(REAL_USER_ID_STRING)));
+        onView(withId(R.id.summonerFollowButton)).check(matches(withText("Unfollow")));
+        onView(withId(R.id.summonerFollowButton)).perform(click());
+        onView(withId(R.id.summonerFollowButton)).check(matches(withText("Follow")));
     }
+
 }

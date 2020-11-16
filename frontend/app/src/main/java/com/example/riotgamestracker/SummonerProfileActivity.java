@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
     private TextView summonerNameText;
     private TextView summonerLevelText;
     private TextView summonerErrorText;
+    private Button summonerFollowButton;
 
     CountingIdlingResource espressoTestIdlingResource = new CountingIdlingResource("Network_Call");
 
@@ -36,6 +38,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
         summonerNameText = (TextView)findViewById(R.id.summonerNameText);
         summonerLevelText = (TextView)findViewById(R.id.summonerLevelText);
         summonerErrorText = (TextView)findViewById(R.id.summonerErrorText);
+        summonerFollowButton = (Button)findViewById(R.id.summonerFollowButton);
 
         espressoTestIdlingResource.increment();
 
@@ -79,6 +82,10 @@ public class SummonerProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(SummonerProfileActivity.this, MatchHistoryActivity.class);
         intent.putExtra("name", summonerViewModel.getSummonerData().getValue().name);
         SummonerProfileActivity.this.startActivity(intent);
+    }
+
+    public void follow(View v) {
+        summonerFollowButton.setText("Unfollow");
     }
 
     public CountingIdlingResource getEspressoIdlingResource() {

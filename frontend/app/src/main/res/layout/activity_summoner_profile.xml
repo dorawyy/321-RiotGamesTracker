@@ -34,6 +34,14 @@
             />
 
         <Button
+            android:id="@+id/summonerFollowButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Follow"
+            android:onClick="follow"></Button>
+
+        <Button
             android:id="@+id/summonerLastMatchButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
