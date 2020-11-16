@@ -69,8 +69,10 @@ for row in past_games:
 
 df = pd.DataFrame(past_games)
 
+print (df.to_json());
+
 #Recommended champ based off only 1 field currently, will add more later
 
 recommendedChampion = df['championName'][df['KDA'].argmax()]
 
-print(f'{{"champion": "{recommendedChampion}"}}')
+# print(f'{{"champion": "{recommendedChampion}"}}')

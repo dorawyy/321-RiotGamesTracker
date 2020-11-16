@@ -108,8 +108,9 @@ app.get('/recommend', (req, res) => {
     // collect data from script
     python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
-        dataToSend += data.toString();
-        recommendLogic.parseChampionInfo(dataToSend);
+        // dataToSend += data.toString();
+        console.log(recommendLogic.parseChampionInfo(data.toString()))
+        dataToSend += (recommendLogic.parseChampionInfo(data.toString())).toString()
     });
     python.stderr.on('data', function (data) {
         console.log('Python script errored');
