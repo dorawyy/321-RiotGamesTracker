@@ -73,4 +73,4 @@ df = pd.DataFrame(past_games)
 
 recommendedChampion = df['championName'][df['KDA'].argmax()]
 
-print(recommendedChampion)
+print(f'{{"champion": "{recommendedChampion}"}}')
