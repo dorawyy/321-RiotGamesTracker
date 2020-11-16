@@ -1,13 +1,14 @@
 const supertest = require('supertest')
-const server = require('../server.js')
-const request = supertest(server)
-//jest.mock('../server.js')
+const s = require('../server.js')
 
+const request = supertest(s.server)
 
-describe('GET /summoner', function(){
+jest.mock('recommendChampionLogic');
+
+describe('GET/', function(){
 
      afterEach(()=> {
-         server.close()
+         s.server.close()
      });
 
         test('Summoner', async done =>{
@@ -40,7 +41,7 @@ describe('GET /summoner', function(){
             done()
             });
 
-            test('Profile', async done =>{
+        test('Profile', async done =>{
 
                 jest.setTimeout(10000);
     
@@ -56,4 +57,20 @@ describe('GET /summoner', function(){
                 expect(request.get).toHaveBeenCalledTimes(1);
                 done()
                 });
+
+       test('Recommend Champ', async done =>{
+
+           jest.setTimeout(10000);
+           expect.assertions(1);
+
+           const Mockresp = "brawler";
+           //s.recommendChampionLogic.parseChampionInfo = jest.fn().mockReturnValueOnce(Mockresp)
+           
+           const response = await request.get('/recommend?name=gunner62&games=20')
+           console.log(response.text);
+           expect(response.text).toBe(Mockresp);
+           expect(response.status).toBe(200);
+           done()
+           });
+
 })

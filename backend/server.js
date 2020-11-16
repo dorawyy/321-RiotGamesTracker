@@ -1,7 +1,7 @@
 const express = require('express');
 const {spawn} = require('child_process');
 
-const recommendLogic = require('./recommendChampionLogic');
+const recommendChampionLogic = require('./recommendChampionLogic');
 
 // import Player Schema
 // const Player = require('./model/PlayerSchema');
@@ -109,8 +109,8 @@ app.get('/recommend', (req, res) => {
     python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
         // dataToSend += data.toString();
-        console.log(recommendLogic.parseChampionInfo(data.toString()))
-        dataToSend += (recommendLogic.parseChampionInfo(data.toString())).toString()
+        console.log(recommendChampionLogic.parseChampionInfo(data.toString()))
+        dataToSend += (recommendChampionLogic.parseChampionInfo(data.toString())).toString()
     });
     python.stderr.on('data', function (data) {
         console.log('Python script errored');
@@ -124,6 +124,7 @@ app.get('/recommend', (req, res) => {
     });
 
 })
+
 
 app.post('/follow', (req, res) => {
     
@@ -186,12 +187,6 @@ setInterval(checkActiveGames, checkActiveGamesInterval);
 //     var process = spawn('python', [])
 // }
 
-const server = app.listen(process.env.port||port, function () {
-    var host = server.address().address
-    var port = server.address().port
-    console.log("App listening at http://%s:%s", host, port)
-
-})
 
 var admin = require("firebase-admin");
 
@@ -224,4 +219,11 @@ function sendNotification(title, body) {
       });
 }
 
-module.exports = server;
+const server = app.listen(process.env.port||port, function () {
+    var host = server.address().address
+    var port = server.address().port
+    console.log("App listening at http://%s:%s", host, port)
+
+})
+
+module.exports = { server, recommendChampionLogic };
