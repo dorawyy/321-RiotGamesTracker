@@ -1,7 +1,7 @@
 const express = require('express');
 const {spawn} = require('child_process');
 
-const recommendLogic = require('./recommendChampionLogic');
+const recommendChampionLogic = require('./recommendChampionLogic');
 
 // import Player Schema
 // const Player = require('./model/PlayerSchema');
@@ -108,8 +108,9 @@ app.get('/recommend', (req, res) => {
     // collect data from script
     python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
-        dataToSend += data.toString();
-        recommendLogic.parseChampionInfo(dataToSend);
+        // dataToSend += data.toString();
+        console.log(recommendChampionLogic.parseChampionInfo(data.toString()))
+        dataToSend += (recommendChampionLogic.parseChampionInfo(data.toString())).toString()
     });
     python.stderr.on('data', function (data) {
         console.log('Python script errored');
@@ -123,6 +124,7 @@ app.get('/recommend', (req, res) => {
     });
 
 })
+
 
 app.post('/follow', (req, res) => {
     
@@ -141,7 +143,39 @@ app.post('/follow', (req, res) => {
 })
 
 function checkActiveGames(){
-    
+    //iterate through the database and check if each summoner is in game
+    //You can call checkSummonerInGame with the summoner name, database should hold name and deviceId;
+}
+
+//This doesnt work yet syncrhonously
+function checkSummonerInGame(name)
+{
+    var dataToSend = "";
+    const python = spawn('python', ['./PythonCode/SummonerSearchDemo.py', name, 'follow']);
+
+    python.on('error', function (data) {
+        console.log('Python script failed to spawn');
+        dataToSend += ("Error, python script failed to spawn")
+    });
+
+    // spawn new child process to call the python script
+    // collect data from script
+    python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+        // dataToSend += data.toString();
+        dataToSend += data.toString();
+    });
+    python.stderr.on('data', function (data) {
+        console.log('Python script errored');
+            dataToSend += data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+        // send data to browser
+        console.log(dataToSend)
+    });
+
 }
 
 setInterval(checkActiveGames, checkActiveGamesInterval);
@@ -153,12 +187,6 @@ setInterval(checkActiveGames, checkActiveGamesInterval);
 //     var process = spawn('python', [])
 // }
 
-const server = app.listen(process.env.port||port, function () {
-    var host = server.address().address
-    var port = server.address().port
-    console.log("App listening at http://%s:%s", host, port)
-
-})
 
 var admin = require("firebase-admin");
 
@@ -191,4 +219,11 @@ function sendNotification(title, body) {
       });
 }
 
-module.exports = server;
+const server = app.listen(process.env.port||port, function () {
+    var host = server.address().address
+    var port = server.address().port
+    console.log("App listening at http://%s:%s", host, port)
+
+})
+
+module.exports = { server, recommendChampionLogic };
