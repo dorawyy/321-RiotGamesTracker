@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from riotwatcher import LolWatcher#, ApiError
+from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 import sys
 import config
@@ -19,6 +19,17 @@ summoner_ranked_stats = watcher.league.by_summoner(region, summoner['id'])
 
 if (printOption == "profile"):
     print(summoner_ranked_stats)
+    
+if (printOption == "follow"):
+    try:
+        spectator = watcher.spectator.by_summoner(region, summoner['id'])
+        print("Summoner in game")
+    except ApiError as err:
+        if (err.response.status_code == 404):
+            print("Summoner not in game")
+        else:
+            raise
+    
 
 match_history = watcher.match.matchlist_by_account(region, summoner['accountId'])
 # print(match_history['matches'][99])

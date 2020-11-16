@@ -142,7 +142,39 @@ app.post('/follow', (req, res) => {
 })
 
 function checkActiveGames(){
-    
+    //iterate through the database and check if each summoner is in game
+    //You can call checkSummonerInGame with the summoner name, database should hold name and deviceId;
+}
+
+//This doesnt work yet syncrhonously
+function checkSummonerInGame(name)
+{
+    var dataToSend = "";
+    const python = spawn('python', ['./PythonCode/SummonerSearchDemo.py', name, 'follow']);
+
+    python.on('error', function (data) {
+        console.log('Python script failed to spawn');
+        dataToSend += ("Error, python script failed to spawn")
+    });
+
+    // spawn new child process to call the python script
+    // collect data from script
+    python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+        // dataToSend += data.toString();
+        dataToSend += data.toString();
+    });
+    python.stderr.on('data', function (data) {
+        console.log('Python script errored');
+            dataToSend += data.toString();
+    });
+    // in close event we are sure that stream from child process is closed
+    python.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+        // send data to browser
+        console.log(dataToSend)
+    });
+
 }
 
 setInterval(checkActiveGames, checkActiveGamesInterval);
