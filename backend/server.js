@@ -1,6 +1,8 @@
 const express = require('express');
 const {spawn} = require('child_process');
 
+const recommendLogic = require('./recommendChampionLogic');
+
 // import Player Schema
 // const Player = require('./model/PlayerSchema');
 // const mongoose = require('mongoose');
@@ -107,6 +109,7 @@ app.get('/recommend', (req, res) => {
     python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
         dataToSend += data.toString();
+        recommendLogic.parseChampionInfo(dataToSend);
     });
     python.stderr.on('data', function (data) {
         console.log('Python script errored');
