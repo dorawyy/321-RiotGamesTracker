@@ -3,6 +3,7 @@ package com.example.riotgamestracker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,8 @@ public class SummonerProfileActivity extends AppCompatActivity {
     private TextView summonerLevelText;
     private TextView summonerErrorText;
 
+    CountingIdlingResource espressoTestIdlingResource = new CountingIdlingResource("Network_Call");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,8 @@ public class SummonerProfileActivity extends AppCompatActivity {
         summonerNameText = (TextView)findViewById(R.id.summonerNameText);
         summonerLevelText = (TextView)findViewById(R.id.summonerLevelText);
         summonerErrorText = (TextView)findViewById(R.id.summonerErrorText);
+
+        espressoTestIdlingResource.increment();
 
         Bundle viewModelData = new Bundle();
         viewModelData.putString("name", getIntent().getStringExtra("name"));
@@ -58,6 +63,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
             summonerNameText.setText(newData.name);
             summonerLevelText.setText("Level: " + newData.level);
             summonerProfileView.setVisibility(View.VISIBLE);
+            espressoTestIdlingResource.decrement();
         });
 
         summonerViewModel.getFollowing().observe(this, newData -> {
@@ -73,5 +79,9 @@ public class SummonerProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(SummonerProfileActivity.this, MatchHistoryActivity.class);
         intent.putExtra("name", summonerViewModel.getSummonerData().getValue().name);
         SummonerProfileActivity.this.startActivity(intent);
+    }
+
+    public CountingIdlingResource getEspressoIdlingResource() {
+        return espressoTestIdlingResource;
     }
 }
