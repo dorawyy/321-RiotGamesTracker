@@ -120,6 +120,9 @@ public class HttpManager {
         request.setRetryPolicy(retryPolicy);
         queue.add(request);
     }
+    public void recommendedChamp(String summoner, final MutableLiveData<DataWrapper<String>> data){
+        data.postValue(new DataWrapper<>("Champion " + summoner, "No error"));
+    }
 
     public void follow(String summoner, String deviceId, final MutableLiveData<DataWrapper<Boolean>> following){
         String url = serverUrl + "follow?name=" + summoner;
