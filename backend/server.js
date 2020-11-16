@@ -133,7 +133,7 @@ app.post('/follow', (req, res) => {
 
     console.log("FOLLOWING ", name);
     console.log("device: ", deviceId);
-    res.send("FOLLWING");
+    res.send('{"ret":"EOK"}');
 
 })
 
