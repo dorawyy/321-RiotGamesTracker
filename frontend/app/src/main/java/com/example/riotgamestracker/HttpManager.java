@@ -8,46 +8,27 @@ import androidx.lifecycle.MutableLiveData;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.riotgamestracker.models.DataWrapper;
 import com.example.riotgamestracker.models.MatchHistory;
 import com.example.riotgamestracker.models.Summoner;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.Headers;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 public class HttpManager {
-    public static final MediaType MEDIA_TYPE_JSON
-            = MediaType.parse("application/json; charset=utf-8");
-
     private static HttpManager instance;
     private RequestQueue queue;
-    private final String serverUrl = "http://10.0.2.2:8081/";
+    private final String serverUrl = "http://52.149.183.181:8081/";
     private final DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(
-            10000,
+            60000,
             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
-    private OkHttpClient client;
-
     public HttpManager(Context context) {
         queue = Volley.newRequestQueue(context);
-        client = new OkHttpClient();
     }
 
     public static synchronized HttpManager getInstance(Context context) {
@@ -63,32 +44,26 @@ public class HttpManager {
         System.out.println(url);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Summoner res = new Summoner();
-                        try {
-                            res.name = response.getJSONObject("Summoner").getString("name");
-                            res.level = response.getJSONObject("Summoner").getInt("summonerLevel");
+                response -> {
+                    Summoner res = new Summoner();
+                    try {
+                        res.name = response.getJSONObject("Summoner").getString("name");
+                        res.level = response.getJSONObject("Summoner").getInt("summonerLevel");
 
-                            data.postValue(res);
-                        } catch (JSONException exception) {
-                            Log.d("Error", "onResponse: " + exception.getMessage());
-                            res.error = true;
-                            res.errorMessage = exception.getMessage();
-                            data.postValue(res);
-                        }
+                        data.postValue(res);
+                    } catch (JSONException exception) {
+                        Log.d("Error", "onResponse: " + exception.getMessage());
+                        res.error = true;
+                        res.errorMessage = exception.getMessage();
+                        data.postValue(res);
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Summoner res = new Summoner();
-                        res.error = true;
-                        res.errorMessage = error.getMessage();
-                        data.postValue(res);
-                        Log.d("Error", "onErrorResponse: " + error.getMessage());
-                    }
+                error -> {
+                    Summoner res = new Summoner();
+                    res.error = true;
+                    res.errorMessage = error.getMessage();
+                    data.postValue(res);
+                    Log.d("Error", "onErrorResponse: " + error.getMessage());
                 });
 
         request.setRetryPolicy(retryPolicy);
@@ -100,28 +75,36 @@ public class HttpManager {
         String url = serverUrl + "summoner?name=" + summoner;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        MatchHistory matchHistory = new MatchHistory(response);
+                response -> {
+                    MatchHistory matchHistory = new MatchHistory(response);
 
-                        data.postValue(matchHistory);
-                    }
+                    data.postValue(matchHistory);
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        MatchHistory res = new MatchHistory(error.getMessage());
-                        data.postValue(res);
-                        Log.d("Error", "onErrorResponse: " + error.getMessage());
-                    }
+                error -> {
+                    MatchHistory res = new MatchHistory(error.getMessage());
+                    data.postValue(res);
+                    Log.d("Error", "onErrorResponse: " + error.getMessage());
                 });
 
         request.setRetryPolicy(retryPolicy);
         queue.add(request);
     }
     public void recommendedChamp(String summoner, final MutableLiveData<DataWrapper<String>> data){
-        data.postValue(new DataWrapper<>("Champion " + summoner, "No error"));
+
+        String url = serverUrl + "summoner?name=" + summoner + "&games=50";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        data.postValue(new DataWrapper<>(response.getString("champion"), null));
+                    } catch (JSONException e) {
+                        data.postValue(new DataWrapper<>(null, e.getMessage()));
+                    }
+                },
+                error -> data.postValue(new DataWrapper<>(null, error.getMessage())));
+
+        request.setRetryPolicy(retryPolicy);
+        queue.add(request);
     }
 
     public void follow(String summoner, String deviceId, final MutableLiveData<DataWrapper<Boolean>> following){
@@ -136,29 +119,12 @@ public class HttpManager {
             return;
         }
 
-        okhttp3.Request request = new okhttp3.Request.Builder()
-                .url(url)
-                .post(RequestBody.create(body.toString(), MEDIA_TYPE_JSON))
-                .build();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
+                response -> following.postValue(new DataWrapper<>(true, null)),
+                error -> following.postValue(new DataWrapper<>(false, error.getMessage())));
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
-                    if (!response.isSuccessful()){
-                        following.postValue(new DataWrapper<>(false, response.message()));
-                        return;
-                    }
-
-                    following.postValue(new DataWrapper<>(true, null));
-                }
-            }
-
-            @Override public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                following.postValue(new DataWrapper<>(false, e.getMessage()));
-            }
-        });
+        request.setRetryPolicy(retryPolicy);
+        queue.add(request);
     }
 
 }
