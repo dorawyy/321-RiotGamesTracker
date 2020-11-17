@@ -6,8 +6,12 @@ exports.parseChampionInfo = function parseChampionInfo(obj) {
 
     // console.log(obj);
     console.log(obj)
-    var json = JSON.parse(obj);
-    console.log(json);
+    try {
+        var json = JSON.parse(obj);
+        console.log(json);
+    } catch(e) {
+        json = obj;
+    }
     
     var bestChampion = json.championName['0'];
     var maxScore = 0;
