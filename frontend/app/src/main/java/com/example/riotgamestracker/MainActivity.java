@@ -88,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
                 // No Code Necessary
             }
         });
-
-        HttpManager.getInstance(getApplicationContext());
     }
 
 

@@ -29,12 +29,12 @@ public class SummonerViewModel extends ViewModel {
     }
 
     private void loadSummonerData() {
-        HttpManager httpManager = HttpManager.getInstance(null);
+        HttpManager httpManager = HttpManager.getInstance();
         httpManager.getSummoner(name, summonerData);
     }
 
     public void follow(String deviceId) {
-        HttpManager httpManager = HttpManager.getInstance(null);
+        HttpManager httpManager = HttpManager.getInstance();
         httpManager.follow(name, deviceId, following);
     }
 }

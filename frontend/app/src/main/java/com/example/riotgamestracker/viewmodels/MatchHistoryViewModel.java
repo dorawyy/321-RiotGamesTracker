@@ -20,7 +20,7 @@ public class MatchHistoryViewModel extends ViewModel {
     }
 
     private void loadMatchHistoryData(String name) {
-        HttpManager httpManager = HttpManager.getInstance(null);
+        HttpManager httpManager = HttpManager.getInstance();
         httpManager.getMatchHistory(name, matchHistoryData);
     }
 }
