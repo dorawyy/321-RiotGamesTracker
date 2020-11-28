@@ -3,15 +3,15 @@ const {spawn} = require('child_process');
 
 const recommendChampionLogic = require('./recommendChampionLogic');
 
-// import Player Schema
-// const Player = require('./model/PlayerSchema');
-// const mongoose = require('mongoose');
+ // import Follower Schema
+ const Follower = require('./model/FollowerSchema');
+ const mongoose = require('mongoose');
 
 // setup express app
 const app = express();
 // connect to mongoDB
-// mongoose.connect('mongodb://localhost:27017/RiotTrackerDB',{ useNewUrlParser: true, useUnifiedTopology: true });
-// mongoose.Promise = global.Promise;
+ mongoose.connect('mongodb://localhost:27017/RiotTrackerDB',{ useNewUrlParser: true, useUnifiedTopology: true });
+ mongoose.Promise = global.Promise;
 
 app.use(express.json());
 
@@ -19,9 +19,6 @@ const port = 8081;    //8081
 const checkActiveGamesInterval = 1500;
 
 app.get('/summoner', (req, res) => {
-    
-    // Save Player Data in DB
-    // Player.create(res);
 
     var dataToSend = "";
 
@@ -54,9 +51,6 @@ app.get('/summoner', (req, res) => {
 
 app.get('/profile', (req, res) => {
     
-    // Save Player Data in DB
-    // Player.create(res);
-
     var dataToSend = "";
 
     let name = req.query.name
@@ -88,9 +82,6 @@ app.get('/profile', (req, res) => {
 })
 
 app.get('/recommend', (req, res) => {
-    
-    // Save Player Data in DB
-    // Player.create(res);
 
     var dataToSend = "";
 
@@ -127,14 +118,23 @@ app.get('/recommend', (req, res) => {
 
 
 app.post('/follow', (req, res) => {
-    
-    // Save Player Data in DB
-    // Player.create(res);
 
     var dataToSend = "";
 
     let name = req.query.name
     let deviceId = req.body.device
+
+    
+    var query = Follower.find({SummonerName : name});
+    if (query == NULL) {
+        Follower.create({SummonerName: name,  followers: {deviceId}});
+    } else {
+        Follower.update(
+            { SummonerName: name }, 
+            { $push: { followers: deviceId } },
+            done
+        );
+    }
 
     console.log("FOLLOWING ", name);
     console.log("device: ", deviceId);
