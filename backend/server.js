@@ -147,12 +147,28 @@ function checkActiveGames(){
     //You can call checkSummonerInGame with the summoner name, database should hold name and deviceId;
 }
 
-//This doesnt work yet syncrhonously
+app.get('/testInGame', (req, res) => {
+
+    var dataToSend = "";
+
+    let name = req.query.name
+    let searchDepth = req.query.games
+
+    let followResult = checkSummonerInGame(name)
+
+    // console.log("FollowResult", followResult)
+    // console.log("result", result)
+
+
+})
+
+// Run this function on everyone in the database on the set interval
 function checkSummonerInGame(name)
 {
     var dataToSend = "";
     const python = spawn('python', ['./PythonCode/SummonerSearchDemo.py', name, 'follow']);
 
+    
     python.on('error', function (data) {
         console.log('Python script failed to spawn');
         dataToSend += ("Error, python script failed to spawn")
@@ -172,11 +188,35 @@ function checkSummonerInGame(name)
     // in close event we are sure that stream from child process is closed
     python.on('close', (code) => {
         console.log(`child process close all stdio with code ${code}`);
-        // send data to browser
+        console.log('inside python.on close')
         console.log(dataToSend)
+        console.log(typeof(dataToSend))
+
+        //1 if in game, 0 if not in game
+        if(dataToSend[0] == "0")
+        {
+            console.log("Inside dataToSendFalse")
+            var query = Follower.find({SummonerName : name});
+            console.log(query)
+
+            if (query.followers != NULL)
+            {
+                console.log(query.followers[0])
+                // Iterate through follower list
+                // Send push notifcation to each one in follower list if they are in game
+                // using sendNotification
+                
+            }
+        }
+
+
     });
 
+    // console.log(dataToSend);
+    
 }
+//Database
+//Device ID, Person that they want to follow
 
 setInterval(checkActiveGames, checkActiveGamesInterval);
 
@@ -191,6 +231,7 @@ setInterval(checkActiveGames, checkActiveGamesInterval);
 var admin = require("firebase-admin");
 
 var path = require('path');
+const { query } = require('express');
 var serviceAccount = require( path.resolve( __dirname, "riot-games-tracker-firebase-adminsdk-5r6sl-5416f03302.json" ) );
 
 admin.initializeApp({
@@ -198,7 +239,7 @@ admin.initializeApp({
   databaseURL: "https://riot-games-tracker.firebaseio.com"
 });
 
-function sendNotification(title, body) {
+function sendNotification(title, body, deviceID) {
     var message = {
       notification:{
           title:title,
