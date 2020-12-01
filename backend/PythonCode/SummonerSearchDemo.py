@@ -23,10 +23,10 @@ if (printOption == "profile"):
 if (printOption == "follow"):
     try:
         spectator = watcher.spectator.by_summoner(region, summoner['id'])
-        print("Summoner in game")
+        print("1")
     except ApiError as err:
         if (err.response.status_code == 404):
-            print("Summoner not in game")
+            print("0")
         else:
             raise
     
