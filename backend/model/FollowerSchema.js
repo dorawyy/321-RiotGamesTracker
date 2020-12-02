@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const FollowerSchema = new Schema(
     {
         _id: {type:String},
-        followers: { type : Array , "default" : [] }
+        followers: { type : Array }
     }
 );
 

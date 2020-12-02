@@ -1,7 +1,6 @@
 const express = require('express');
 const {spawn} = require('child_process');
 
-
 const followrRouter = express.Router();
 
  // import Follower Schema
@@ -27,14 +26,19 @@ const checkActiveGamesInterval = 1500;
 followrRouter.post('/follow', async (req, res) => {
     var dataToSend = "";
 
-    let name = req.query.name
+    //let name = req.query.name
     let deviceId = req.body.device
+    let name = req.query.name
     
     const q = await Follower.findById(name).then();
     if (q == null) {
         await Follower.create({_id: name,  followers: {deviceId}}).then(function(f) {
             res.send(true)
         });
+        await Follower.updateOne(
+            { _id: name }, 
+            { $push: { followers: deviceId } }
+            ).then();
     } else {
         if(q.followers.includes(deviceId)){
             await Follower.updateOne(
@@ -52,6 +56,7 @@ followrRouter.post('/follow', async (req, res) => {
             });
         }
     }
+
 })
 
 followrRouter.get('/checkFollowing', async (req, res) => {
@@ -79,13 +84,10 @@ followrRouter.get('/testInGame', (req, res) => {
 
     let name = req.query.name
     let searchDepth = req.query.games
-
-    let followResult = checkSummonerInGame(name)
+    checkSummonerInGame(name)
 
     // console.log("FollowResult", followResult)
     // console.log("result", result)
-
-
 })
 
 // Run this function on everyone in the database on the set interval
@@ -94,7 +96,6 @@ function checkSummonerInGame(name)
     var dataToSend = "";
     const python = spawn('python', ['./PythonCode/SummonerSearchDemo.py', name, 'follow']);
 
-    
     python.on('error', function (data) {
         console.log('Python script failed to spawn');
         dataToSend += ("Error, python script failed to spawn")
@@ -112,38 +113,71 @@ function checkSummonerInGame(name)
             dataToSend += data.toString();
     });
     // in close event we are sure that stream from child process is closed
-    python.on('close', (code) => {
+    python.on('close', async (code) => {
         console.log(`child process close all stdio with code ${code}`);
         console.log('inside python.on close')
         console.log(dataToSend)
         console.log(typeof(dataToSend))
 
         //1 if in game, 0 if not in game
-        if(dataToSend[0] == "0")
+        if(dataToSend[0] == "1")
         {
             console.log("Inside dataToSendFalse")
-            var query = Follower.findById(name);
+            var query = await Follower.findById(name).then(console.log("done"));
             console.log(query)
-
-            if (query != NULL)
+            console.log("Query done")
+            var i = 1;
+            while (query.followers[i] != null)
             {
-                console.log(query.followers[0])
                 // Iterate through follower list
                 // Send push notifcation to each one in follower list if they are in game
                 // using sendNotification
+                console.log("query.followers[i] != null");
+                console.log(query.followers[i] != null);
+                sendNotification("Player in Game", " ..Player is resting... ", query.followers[i]);
+                i++;
                 
             }
         }
 
-
     });
 
     // console.log(dataToSend);
-    
 }
 
-
 setInterval(checkActiveGames, checkActiveGamesInterval);
+
+var admin = require("firebase-admin");
+
+var path = require('path');
+const { query } = require('express');
+var serviceAccount = require( path.resolve( __dirname, "riot-games-tracker-firebase-adminsdk-5r6sl-5416f03302.json" ) );
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://riot-games-tracker.firebaseio.com"
+});
+
+function sendNotification(title, body, deviceID) {
+    var message = {
+      notification:{
+          title:title,
+          body:body
+        },
+      topic: "notifications"
+    };
+
+    // Send a message to the device corresponding to the provided
+    // registration token.
+    admin.messaging().send(message)
+      .then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
+}
 
 
 module.exports = followrRouter;
