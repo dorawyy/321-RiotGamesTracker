@@ -29,7 +29,7 @@ if (printOption == "follow"):
             print("0")
         else:
             raise
-    
+
 
 match_history = watcher.match.matchlist_by_account(region, summoner['accountId'])
 # print(match_history['matches'][99])
