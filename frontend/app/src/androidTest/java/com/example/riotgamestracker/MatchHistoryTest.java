@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class MatchHistoryTest {
     private final String USER_ID_WITH_HISTORY_STRING = "Gunner62";
-    private final String NEW_USER_ID_STRING = "new user";
+    private final String NEW_USER_ID_STRING = "TestCaseFailed";
 
     @Rule
     public ActivityScenarioRule<MainActivity> mainActivityRule =
@@ -81,7 +81,7 @@ public class MatchHistoryTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        onView(withId(R.id.matchHistoryErrorText)).check(matches(withText(NEW_USER_ID_STRING + " has not played any matches yet")));
+        onView(withId(R.id.matchHistoryErrorText)).check(matches(withText("Summoner has not played any matches yet")));
     }
 
 }

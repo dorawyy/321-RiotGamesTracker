@@ -94,7 +94,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
 
         summonerViewModel.getRecommendedChamp().observe(this, champ -> {
             if(champ.getError() != null && !champ.getError().isEmpty()){
-                System.out.println("ERROR: "+ champ.getError());
+                recommendedChampExplanationText.setText(champ.getError());
             } else {
                 recommendedChampExplanationText.setText("Based on analysis of the last 20 games, we recommend the following champ:");
                 recommendedChampText.setText(champ.getData());

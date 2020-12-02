@@ -30,9 +30,14 @@ if (printOption == "follow"):
         else:
             raise
 
-
-match_history = watcher.match.matchlist_by_account(region, summoner['accountId'])
-# print(match_history['matches'][99])
+try:
+    match_history = watcher.match.matchlist_by_account(region, summoner['accountId'])
+except ApiError as err:
+    if (printOption == "summoner"):
+        print(f'{{"Summoner":{{"name":"{summoner["name"]}","profileIconId":"{summoner["profileIconId"]}","summonerLevel":"{summoner["summonerLevel"]}"}},"MatchHistory":')
+        print("0")
+        print('}')
+        sys.exit()
 
 last_match = match_history['matches'][0]
 

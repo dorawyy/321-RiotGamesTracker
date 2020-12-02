@@ -67,7 +67,7 @@ public class HttpManager {
                     Summoner res = new Summoner();
                     Log.d("Error", "onResponse: " + exception.getMessage());
                     res.error = true;
-                    res.errorMessage = exception.getMessage();
+                    res.errorMessage = "Summoner not found";
                     data.postValue(res);
                 }
             }
@@ -75,7 +75,7 @@ public class HttpManager {
             @Override public void onFailure(Call call, IOException e) {
                 Summoner res = new Summoner();
                 res.error = true;
-                res.errorMessage = e.getMessage();
+                res.errorMessage = "Summoner not found";
                 data.postValue(res);
             }
         });
@@ -116,11 +116,16 @@ public class HttpManager {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException {
-                data.postValue(new DataWrapper<>(response.body().string(), null));
+                String body = response.body().string();
+                if(body.length()>30){
+                    data.postValue(new DataWrapper<>(null, "Play more games to get a champ recommendation!"));
+                } else {
+                    data.postValue(new DataWrapper<>(body, null));
+                }
             }
 
             @Override public void onFailure(Call call, IOException e) {
-                data.postValue(new DataWrapper<>(null, e.getMessage()));
+                data.postValue(new DataWrapper<>(null, "Play more games to get a champ recommendation!"));
             }
         });
     }

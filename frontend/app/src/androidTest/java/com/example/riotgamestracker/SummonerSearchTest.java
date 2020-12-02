@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class SummonerSearchTest {
     private final String REAL_USER_ID_STRING = "Gunner62";
-    private final String FAKE_USER_ID_STRING = "fake user";
+    private final String FAKE_USER_ID_STRING = "lol123134134";
 
     @Rule
     public ActivityScenarioRule<MainActivity> mainActivityRule =

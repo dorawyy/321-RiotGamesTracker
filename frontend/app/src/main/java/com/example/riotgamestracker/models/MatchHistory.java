@@ -44,7 +44,7 @@ public class MatchHistory {
 
         } catch (JSONException exception) {
             this.error = true;
-            this.errorMessage = exception.getMessage();
+            this.errorMessage = "Summoner has not played any matches yet";
 
             Log.d("Error", "MatchHistory: " + exception.getMessage());
         }
