@@ -19,7 +19,7 @@ summoner_ranked_stats = watcher.league.by_summoner(region, summoner['id'])
 
 if (printOption == "profile"):
     print(summoner_ranked_stats)
-    
+
 if (printOption == "follow"):
     try:
         spectator = watcher.spectator.by_summoner(region, summoner['id'])
@@ -29,7 +29,7 @@ if (printOption == "follow"):
             print("0")
         else:
             raise
-    
+
 
 match_history = watcher.match.matchlist_by_account(region, summoner['accountId'])
 # print(match_history['matches'][99])
