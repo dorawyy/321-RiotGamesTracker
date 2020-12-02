@@ -1,15 +1,35 @@
-const supertest = require('supertest')
-const s = require('../server.js')
+//const { Mongoose } = require('mongoose');
+const supertest = require('supertest');
+//const { db } = require('../model/FollowerSchema.js');
+const server = require('../server.js')
 
-const request = supertest(s.server)
+const request = supertest(server)
 
 jest.mock('../recommendChampionLogic');
+jest.mock('../followrRoute.js');
 
 describe('GET/', function(){
 
      afterEach(()=> {
-         s.server.close()
+         server.close()
+         //db.close()
      });
+
+     test('summoner', async done =>{
+        jest.setTimeout(10000);
+        const response = await request.get('/summoner?name=gunner62')
+        expect(response.status).toBe(200)
+        expect(JSON.parse(response.text).Summoner.name).toBe('Gunner62')
+        done()
+        });
+    
+     test('profile', async done =>{
+        jest.setTimeout(10000);
+        const response = await request.get('/profile?name=gunner62')
+        expect(response.status).toBe(200)
+        expect(response.text.includes("'summonerName': 'Gunner62'")).toBeTruthy()
+        done()
+        });
 
         test('Summoner', async done =>{
 
@@ -63,11 +83,10 @@ describe('GET/', function(){
            expect.assertions(1);
 
            const Mockresp = "brawler";
-           
+
            const response = await request.get('/recommend?name=gunner62&games=20')
            // console.log(response);
-           // expect(response).toBe(Mockresp);
-           expect(response.status).toBe(200);
+           expect(response).toBe(Mockresp);
            done()
            });
 

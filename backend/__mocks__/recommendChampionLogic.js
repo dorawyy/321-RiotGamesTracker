@@ -1,7 +1,7 @@
 
 let fakeData = "brawler";
 
-const recommendChampionLogic = jest.createMockFromModule('../recommendChampionLogic.js');
+const recommendChampionLogic = jest.createMockFromModule('./recommendChampionLogic.js');
 
 //Takes in  a json object
 function parseChampionInfo(obj) {

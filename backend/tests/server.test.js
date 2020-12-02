@@ -1,7 +1,6 @@
 
 const supertest = require('supertest')
-const s = require('../server.js')
-const server = s.server;
+const server = require('../server.js')
 const request = supertest(server)
 
 
@@ -19,6 +18,14 @@ describe('GET', function(){
         done()
         });
     
+    it('profile', async done =>{
+        jest.setTimeout(10000);
+        const response = await request.get('/profile?name=gunner62')
+        expect(response.status).toBe(200)
+        expect(response.text.includes("'summonerName': 'Gunner62'")).toBeTruthy()
+        done()
+        });
+
     it('recommed valid', async done =>{
         jest.setTimeout(10000);
         const response = await request.get('/recommend?name=gunner62&games=20')
@@ -42,11 +49,4 @@ describe('GET', function(){
         done()
         });
 
-    it('profile', async done =>{
-        jest.setTimeout(10000);
-        const response = await request.get('/profile?name=gunner62')
-        expect(response.status).toBe(200)
-        expect(response.text.includes("'summonerName': 'Gunner62'")).toBeTruthy()
-        done()
-        });
 })
