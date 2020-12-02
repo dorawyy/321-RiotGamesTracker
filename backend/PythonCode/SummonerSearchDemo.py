@@ -95,7 +95,7 @@ df = pd.DataFrame(participants)
 # print(df)
 if (printOption == "summoner"):
     json_df = df.to_json()
-    print(f'{{"Summoner":{{"name":"{summoner["name"]}","summonerLevel":"{summoner["summonerLevel"]}"}},"MatchHistory":')
+    print(f'{{"Summoner":{{"name":"{summoner["name"]}","profileIconId":"{summoner["profileIconId"]}","summonerLevel":"{summoner["summonerLevel"]}"}},"MatchHistory":')
     print(json_df)
     print('}')
 
