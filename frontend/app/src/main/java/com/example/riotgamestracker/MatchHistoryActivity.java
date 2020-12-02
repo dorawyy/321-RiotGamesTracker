@@ -121,9 +121,9 @@ public class MatchHistoryActivity extends AppCompatActivity {
             }
             else if(getItem(position) instanceof PlayerMatchStats){
                 PlayerMatchStats stats = (PlayerMatchStats) getItem(position);
-                Picasso.get().load("http://ddragon.leagueoflegends.com/cdn/10.22.1/img/profileicon/588.png").into((ImageView)convertView.findViewById(R.id.matchHistoryIcon));
+                Picasso.get().load("http://ddragon.leagueoflegends.com/cdn/10.24.1/img/champion/" + stats.getCharacter() + ".png").into((ImageView)convertView.findViewById(R.id.matchHistoryIcon));
 
-                ((TextView) convertView.findViewById(R.id.matchHistoryCharacterText)).setText(stats.getCharacter());
+                ((TextView) convertView.findViewById(R.id.matchHistoryCharacterText)).setText(stats.getSummonerName());
                 ((TextView) convertView.findViewById(R.id.matchHistoryLevel)).setText("Level: " + stats.getChampLevel());
 
                 String kda = String.format("%d/%d/%d", stats.getKills(), stats.getDeaths(), stats.getAssists());

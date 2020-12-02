@@ -177,4 +177,19 @@ public class MatchHistory {
 
         return retVal;
     }
+
+    public static String getName(String index, JSONObject histJson) {
+        String retVal = null;
+
+        if (histJson != null) {
+            try {
+                retVal = histJson.getJSONObject("SummonerName").getString(index);
+
+            } catch (JSONException exception) {
+                Log.d("Error", "getName: " + exception.getMessage());
+            }
+        }
+
+        return retVal;
+    }
 }

@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 // match stats for a single player
 public class PlayerMatchStats {
+    private String summonerName;
     private String character;
     private int kills;
     private int deaths;
@@ -15,6 +16,7 @@ public class PlayerMatchStats {
 
     public PlayerMatchStats(String index, JSONObject histJson)
     {
+        this.summonerName = MatchHistory.getName(index, histJson);
         this.character = MatchHistory.getCharacter(index, histJson);
         this.kills = MatchHistory.getKills(index, histJson);
         this.deaths = MatchHistory.getDeaths(index, histJson);
@@ -23,6 +25,10 @@ public class PlayerMatchStats {
         this.assists = MatchHistory.getAssists(index, histJson);
         this.goldEarned = MatchHistory.getGoldEarned(index, histJson);
         this.won = MatchHistory.checkWin(index, histJson);
+    }
+
+    public String getSummonerName() {
+        return summonerName;
     }
 
     public String getCharacter() {
