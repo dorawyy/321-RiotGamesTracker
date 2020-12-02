@@ -1,6 +1,6 @@
 //const { Mongoose } = require('mongoose');
 const supertest = require('supertest');
-//const { db } = require('../model/FollowerSchema.js');
+const { db } = require('../model/FollowerSchema.js');
 const server = require('../server.js')
 
 const request = supertest(server)
@@ -12,7 +12,7 @@ describe('GET/', function(){
 
      afterEach(()=> {
          server.close()
-         //db.close()
+         db.close()
      });
 
      test('summoner', async done =>{
