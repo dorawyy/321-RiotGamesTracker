@@ -69,6 +69,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
             }
             summonerNameText.setText(newData.name);
             summonerLevelText.setText("Level: " + newData.level);
+            Picasso.get().load("http://ddragon.leagueoflegends.com/cdn/10.24.1/img/profileicon/" + newData.profileIconId + ".png").into((ImageView)findViewById(R.id.profileIcon));
             summonerProfileView.setVisibility(View.VISIBLE);
 
             espressoTestIdlingResource.decrement();

@@ -60,6 +60,7 @@ public class HttpManager {
                     Summoner res = new Summoner();
                     res.name = responseJson.getJSONObject("Summoner").getString("name");
                     res.level = responseJson.getJSONObject("Summoner").getInt("summonerLevel");
+                    res.profileIconId = responseJson.getJSONObject("Summoner").getInt("profileIconId");
 
                     data.postValue(res);
                 } catch (JSONException exception) {
