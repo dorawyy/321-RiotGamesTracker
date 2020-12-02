@@ -48,6 +48,19 @@
             android:layout_marginTop="20dp"
             android:text="View last match"
             android:onClick="matchHistory"></Button>
+
+        <TextView
+            android:id="@+id/recommendedChampExplanationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/recommendedChampText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="sans-serif-black"
+            android:textSize="32dp"/>
     </LinearLayout>
 
     <ProgressBar
