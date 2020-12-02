@@ -19,7 +19,7 @@ summoner_ranked_stats = watcher.league.by_summoner(region, summoner['id'])
 
 if (printOption == "profile"):
     print(summoner_ranked_stats)
-    
+
 if (printOption == "follow"):
     try:
         spectator = watcher.spectator.by_summoner(region, summoner['id'])

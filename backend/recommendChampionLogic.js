@@ -19,7 +19,7 @@ exports.parseChampionInfo = function parseChampionInfo(obj) {
         var performanceScore = 0;
 
         console.log(json.championName[championIndex]);
-        performanceScore += json.win[championIndex] == true ? 10 : 0;
+        performanceScore += json.win[championIndex] === true ? 10 : 0;
         // console.log(performanceScore);
 
         performanceScore += json.KDA[championIndex] * 3;
