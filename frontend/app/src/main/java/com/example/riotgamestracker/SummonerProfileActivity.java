@@ -30,8 +30,6 @@ public class SummonerProfileActivity extends AppCompatActivity {
     private TextView recommendedChampExplanationText;
     private TextView recommendedChampText;
 
-    CountingIdlingResource espressoTestIdlingResource = new CountingIdlingResource("Network_Call");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +46,6 @@ public class SummonerProfileActivity extends AppCompatActivity {
 
         recommendedChampExplanationText.setText("Analyzing " + getIntent().getStringExtra("name") + "'s games...");
 
-        espressoTestIdlingResource.increment();
 
         Bundle viewModelData = new Bundle();
         viewModelData.putString("name", getIntent().getStringExtra("name"));
@@ -76,7 +73,6 @@ public class SummonerProfileActivity extends AppCompatActivity {
             Picasso.get().load("http://ddragon.leagueoflegends.com/cdn/10.24.1/img/profileicon/" + newData.profileIconId + ".png").into((ImageView)findViewById(R.id.profileIcon));
             summonerProfileView.setVisibility(View.VISIBLE);
 
-            espressoTestIdlingResource.decrement();
         });
 
         summonerViewModel.getFollowing().observe(this, newData -> {
@@ -112,9 +108,5 @@ public class SummonerProfileActivity extends AppCompatActivity {
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String deviceId = sharedPref.getString(getString(R.string.fcm_token_key), "");
         summonerViewModel.follow(deviceId);
-    }
-
-    public CountingIdlingResource getEspressoIdlingResource() {
-        return espressoTestIdlingResource;
     }
 }
