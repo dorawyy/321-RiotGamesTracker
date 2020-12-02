@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.riotgamestracker.viewmodels.SummonerViewModel;
 import com.squareup.picasso.Picasso;
@@ -81,9 +80,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
         });
 
         summonerViewModel.getFollowing().observe(this, newData -> {
-            if(newData.getError() != null && !newData.getError().isEmpty()){
-
-            } else {
+            if (newData.getError() == null || newData.getError().isEmpty()) {
                 if(newData.getData()){
                     summonerFollowButton.setText("Unfollow");
                 } else {
