@@ -129,7 +129,6 @@ app.get('/recommend', (req, res) => {
 
 
 app.post('/follow', async (req, res) => {
-
     var dataToSend = "";
 
     let name = req.query.name
@@ -138,21 +137,39 @@ app.post('/follow', async (req, res) => {
     const q = await Follower.findById(name).then();
     if (q == null) {
         await Follower.create({_id: name,  followers: {deviceId}}).then(function(f) {
-            res.send('{"create":"EOK"}')
+            res.send(true)
         });
     } else {
-        await Follower.updateOne(
+        if(q.followers.includes(deviceId)){
+            await Follower.updateOne(
+            { _id: name }, 
+            { $pull: { followers: deviceId } }
+            ).then(function(f){
+                res.send(false)
+            });
+        } else {
+            await Follower.updateOne(
             { _id: name }, 
             { $push: { followers: deviceId } }
-        ).then(function(f){
-            res.send('{"update":"EOK"}')
-        });
+            ).then(function(f){
+                res.send(true)
+            });
+        }
     }
+})
 
-    console.log("FOLLOWING ", name);
-    console.log("device: ", deviceId);
-    console.log(q);
+app.get('/checkFollowing', async (req, res) => {
+    var dataToSend = "";
 
+    let name = req.query.name
+    let deviceId = req.query.device
+    
+    const q = await Follower.findById(name).then();
+    if(q){
+        res.send(q.followers.includes(deviceId));
+    } else {
+        res.send(false);
+    }
 })
 
 function checkActiveGames(){

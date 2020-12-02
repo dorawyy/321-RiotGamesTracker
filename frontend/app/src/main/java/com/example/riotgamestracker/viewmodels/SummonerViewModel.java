@@ -19,7 +19,7 @@ public class SummonerViewModel extends ViewModel {
         following = new MutableLiveData<>();
         recommendedChamp = new MutableLiveData<>();
         name = savedStateHandle.get("name");
-        loadSummonerData();
+        loadSummonerData(savedStateHandle.get("deviceId"));
     }
 
     public MutableLiveData<Summoner> getSummonerData() {
@@ -34,10 +34,11 @@ public class SummonerViewModel extends ViewModel {
         return recommendedChamp;
     }
 
-    private void loadSummonerData() {
+    private void loadSummonerData(String deviceId) {
         HttpManager httpManager = HttpManager.getInstance();
         httpManager.getSummoner(name, summonerData);
         httpManager.recommendedChamp(name, recommendedChamp);
+        httpManager.checkFollowing(name, deviceId, following);
     }
 
     public void follow(String deviceId) {

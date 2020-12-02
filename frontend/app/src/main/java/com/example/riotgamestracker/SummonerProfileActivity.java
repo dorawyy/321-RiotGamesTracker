@@ -53,6 +53,11 @@ public class SummonerProfileActivity extends AppCompatActivity {
 
         Bundle viewModelData = new Bundle();
         viewModelData.putString("name", getIntent().getStringExtra("name"));
+        Context context = getApplicationContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String deviceId = sharedPref.getString(getString(R.string.fcm_token_key), "");
+        viewModelData.putString("deviceId", deviceId);
         summonerViewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(getApplication(), this, viewModelData)).get(SummonerViewModel.class);
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
@@ -79,7 +84,11 @@ public class SummonerProfileActivity extends AppCompatActivity {
             if(newData.getError() != null && !newData.getError().isEmpty()){
 
             } else {
-
+                if(newData.getData()){
+                    summonerFollowButton.setText("Unfollow");
+                } else {
+                    summonerFollowButton.setText("Follow");
+                }
             }
         });
 
@@ -106,7 +115,6 @@ public class SummonerProfileActivity extends AppCompatActivity {
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String deviceId = sharedPref.getString(getString(R.string.fcm_token_key), "");
         summonerViewModel.follow(deviceId);
-        summonerFollowButton.setText("Unfollow");
     }
 
     public CountingIdlingResource getEspressoIdlingResource() {

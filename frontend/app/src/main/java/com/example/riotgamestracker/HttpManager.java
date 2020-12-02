@@ -144,12 +144,31 @@ public class HttpManager {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) {
-                following.postValue(new DataWrapper<>(true, null));
+            public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException {
+                following.postValue(new DataWrapper<>(response.body().string().equals("true"), null));
             }
 
             @Override public void onFailure(Call call, IOException e) {
-                following.postValue(new DataWrapper<>(false, e.getMessage()));
+                following.postValue(new DataWrapper<>(null, e.getMessage()));
+            }
+        });
+    }
+
+    public void checkFollowing(String summoner, String deviceId, final MutableLiveData<DataWrapper<Boolean>> data){
+        String url = serverUrl + "checkFollowing?name=" + summoner + "&device=" + deviceId;
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException {
+                data.postValue(new DataWrapper<>(response.body().string().equals("true"), null));
+            }
+
+            @Override public void onFailure(Call call, IOException e) {
+                data.postValue(new DataWrapper<>(null, e.getMessage()));
             }
         });
     }
