@@ -10,8 +10,20 @@ const recommendChampionLogic = require('./recommendChampionLogic');
 // setup express app
 const app = express();
 // connect to mongoDB
- mongoose.connect('mongodb://localhost:27017/RiotTrackerDB',{ useNewUrlParser: true, useUnifiedTopology: true });
- mongoose.Promise = global.Promise;
+ //mongoose.connect('mongodb://localhost:27017/RiotTrackerDB',{ useNewUrlParser: true, useUnifiedTopology: true });
+ var uristring = 
+ 'mongodb://localhost:27017/RiotDB';
+ mongoose.connect(uristring,{ useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log('Connected MongoDB: '  + uristring)).catch((err) => console.error("Coudn't connect MongoDB....", err));
+
+//  mongoose.connect(uristring,{ useNewUrlParser: true, useUnifiedTopology: true }, function (err, res) {
+//     if (err) {
+//     console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+//     } else {
+//     console.log ('Successfully connected to: ' + uristring);
+//     }
+//   });
+
+mongoose.Promise = global.Promise;
 
 app.use(express.json());
 
@@ -113,32 +125,33 @@ app.get('/recommend', (req, res) => {
         // send data to browser
         res.send(dataToSend)
     });
-
 })
 
 
-app.post('/follow', (req, res) => {
+app.post('/follow', async (req, res) => {
 
     var dataToSend = "";
 
     let name = req.query.name
     let deviceId = req.body.device
-
     
-    var query = Follower.find({SummonerName : name});
-    if (query == NULL) {
-        Follower.create({SummonerName: name,  followers: {deviceId}});
+    const q = await Follower.findById(name).then();
+    if (q == null) {
+        await Follower.create({_id: name,  followers: {deviceId}}).then(function(f) {
+            res.send('{"create":"EOK"}')
+        });
     } else {
-        Follower.update(
-            { SummonerName: name }, 
-            { $push: { followers: deviceId } },
-            done
-        );
+        await Follower.updateOne(
+            { _id: name }, 
+            { $push: { followers: deviceId } }
+        ).then(function(f){
+            res.send('{"update":"EOK"}')
+        });
     }
 
     console.log("FOLLOWING ", name);
     console.log("device: ", deviceId);
-    res.send('{"ret":"EOK"}');
+    console.log(q);
 
 })
 

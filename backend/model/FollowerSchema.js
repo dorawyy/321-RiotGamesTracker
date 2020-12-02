@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const FollowerSchema = new Schema(
     {
-        SummonerName: {type:String},
+        _id: {type:String},
         followers: { type : Array , "default" : [] }
     }
 );
