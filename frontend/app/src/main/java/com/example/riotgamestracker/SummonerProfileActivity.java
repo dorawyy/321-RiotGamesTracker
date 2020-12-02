@@ -11,10 +11,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.riotgamestracker.viewmodels.SummonerViewModel;
+import com.squareup.picasso.Picasso;
 
 public class SummonerProfileActivity extends AppCompatActivity {
     private SummonerViewModel summonerViewModel;
@@ -86,6 +88,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
             } else {
                 recommendedChampExplanationText.setText("Based on analysis of the last 20 games, we recommend the following champ:");
                 recommendedChampText.setText(champ.getData());
+                Picasso.get().load("http://ddragon.leagueoflegends.com/cdn/10.24.1/img/champion/" + champ.getData() + ".png").into((ImageView)findViewById(R.id.champIcon));
             }
         });
     }
