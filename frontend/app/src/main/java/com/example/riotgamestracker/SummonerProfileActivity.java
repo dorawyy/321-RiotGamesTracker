@@ -11,10 +11,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.riotgamestracker.viewmodels.SummonerViewModel;
+import com.squareup.picasso.Picasso;
 
 public class SummonerProfileActivity extends AppCompatActivity {
     private SummonerViewModel summonerViewModel;
@@ -25,6 +27,9 @@ public class SummonerProfileActivity extends AppCompatActivity {
     private TextView summonerLevelText;
     private TextView summonerErrorText;
     private Button summonerFollowButton;
+
+    private TextView recommendedChampExplanationText;
+    private TextView recommendedChampText;
 
     CountingIdlingResource espressoTestIdlingResource = new CountingIdlingResource("Network_Call");
 
@@ -39,6 +44,10 @@ public class SummonerProfileActivity extends AppCompatActivity {
         summonerLevelText = (TextView)findViewById(R.id.summonerLevelText);
         summonerErrorText = (TextView)findViewById(R.id.summonerErrorText);
         summonerFollowButton = (Button)findViewById(R.id.summonerFollowButton);
+        recommendedChampExplanationText = (TextView)findViewById(R.id.recommendedChampExplanationText);
+        recommendedChampText = (TextView)findViewById(R.id.recommendedChampText);
+
+        recommendedChampExplanationText.setText("Analyzing " + getIntent().getStringExtra("name") + "'s games...");
 
         espressoTestIdlingResource.increment();
 
@@ -46,11 +55,6 @@ public class SummonerProfileActivity extends AppCompatActivity {
         viewModelData.putString("name", getIntent().getStringExtra("name"));
         summonerViewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(getApplication(), this, viewModelData)).get(SummonerViewModel.class);
 
-        Context context = getApplicationContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String deviceId = sharedPref.getString(getString(R.string.fcm_token_key), "");
-        summonerViewModel.follow(deviceId);
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         summonerViewModel.getSummonerData().observe(this, newData -> {
             summonerProfileSpinner.setVisibility(View.GONE);
@@ -66,6 +70,7 @@ public class SummonerProfileActivity extends AppCompatActivity {
             summonerNameText.setText(newData.name);
             summonerLevelText.setText("Level: " + newData.level);
             summonerProfileView.setVisibility(View.VISIBLE);
+
             espressoTestIdlingResource.decrement();
         });
 
@@ -74,6 +79,16 @@ public class SummonerProfileActivity extends AppCompatActivity {
 
             } else {
 
+            }
+        });
+
+        summonerViewModel.getRecommendedChamp().observe(this, champ -> {
+            if(champ.getError() != null && !champ.getError().isEmpty()){
+                System.out.println("ERROR: "+ champ.getError());
+            } else {
+                recommendedChampExplanationText.setText("Based on analysis of the last 20 games, we recommend the following champ:");
+                recommendedChampText.setText(champ.getData());
+                Picasso.get().load("http://ddragon.leagueoflegends.com/cdn/10.24.1/img/champion/" + champ.getData() + ".png").into((ImageView)findViewById(R.id.champIcon));
             }
         });
     }
@@ -85,6 +100,11 @@ public class SummonerProfileActivity extends AppCompatActivity {
     }
 
     public void follow(View v) {
+        Context context = getApplicationContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String deviceId = sharedPref.getString(getString(R.string.fcm_token_key), "");
+        summonerViewModel.follow(deviceId);
         summonerFollowButton.setText("Unfollow");
     }
 

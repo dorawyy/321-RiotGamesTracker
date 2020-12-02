@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -30,7 +31,11 @@ public class HttpManager {
     private final OkHttpClient client;
 
     public HttpManager() {
-        client = new OkHttpClient();
+        client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
     }
 
     public static synchronized HttpManager getInstance() {
@@ -101,7 +106,7 @@ public class HttpManager {
     }
 
     public void recommendedChamp(String summoner, final MutableLiveData<DataWrapper<String>> data){
-        String url = serverUrl + "summoner?name=" + summoner + "&games=50";
+        String url = serverUrl + "recommend?name=" + summoner + "&games=20";
 
         okhttp3.Request request = new okhttp3.Request.Builder()
                 .url(url)
@@ -110,12 +115,7 @@ public class HttpManager {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException {
-                try {
-                    JSONObject responseJson = new JSONObject(response.body().string());
-                    data.postValue(new DataWrapper<>(responseJson.getString("champion"), null));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                data.postValue(new DataWrapper<>(response.body().string(), null));
             }
 
             @Override public void onFailure(Call call, IOException e) {
