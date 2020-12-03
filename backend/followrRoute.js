@@ -35,7 +35,8 @@ followrRouter.post('/follow', async (req, res) => {
         });
         await Follower.updateOne(
             { _id: name }, 
-            { $push: { followers: deviceId } } ).then();
+            { $push: { followers: deviceId } }
+            ).then();
     } else {
         if(q.followers.includes(deviceId)){
             await Follower.updateOne(
@@ -162,7 +163,7 @@ function sendNotification(title, body, deviceID) {
           title:title,
           body:body
         },
-      topic: "notifications"
+      token: deviceID
     };
 
     // Send a message to the device corresponding to the provided

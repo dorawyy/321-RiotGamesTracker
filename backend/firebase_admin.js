@@ -16,7 +16,7 @@ function sendNotification(title, body, deviceID) {
           title:title,
           body:body
         },
-      topic: "notifications"
+      token: deviceID
     };
 
     // Send a message to the device corresponding to the provided
