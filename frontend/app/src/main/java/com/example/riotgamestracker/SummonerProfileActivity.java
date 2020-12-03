@@ -3,7 +3,6 @@ package com.example.riotgamestracker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.test.espresso.idling.CountingIdlingResource;
 
 import android.content.Context;
 import android.content.Intent;
