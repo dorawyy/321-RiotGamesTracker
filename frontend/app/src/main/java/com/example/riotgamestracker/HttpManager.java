@@ -26,7 +26,7 @@ public class HttpManager {
             = MediaType.parse("application/json; charset=utf-8");
 
     private static HttpManager instance;
-    private final String serverUrl = "http://10.0.2.2:8081/";
+    private final String serverUrl = "http://52.149.183.181:8081/";
 
     private final OkHttpClient client;
 
