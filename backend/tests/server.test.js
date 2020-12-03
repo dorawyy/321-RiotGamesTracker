@@ -3,11 +3,14 @@ const supertest = require('supertest')
 const server = require('../server.js')
 const request = supertest(server)
 
+const { db } = require('../model/FollowerSchema.js');
+
 
 describe('GET', function(){
 
     afterEach(()=> {
         server.close()
+        db.close()
     });
 
     it('summoner', async done =>{
@@ -28,15 +31,8 @@ describe('GET', function(){
 
     it('recommed valid', async done =>{
         jest.setTimeout(10000);
-        const response = await request.get('/recommend?name=gunner62&games=20')
+        const response = await request.get('/recommend?name=Gunner62&games=20')
         //console.log(response.text)
-        expect(response.status).toBe(200)
-        done()
-        });
-
-    it('should return successfully', async done =>{
-        jest.setTimeout(10000);
-        const response = await request.get('/recommend?name=aayush&games=20')
         expect(response.status).toBe(200)
         done()
         });
