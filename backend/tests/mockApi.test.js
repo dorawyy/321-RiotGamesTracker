@@ -6,7 +6,6 @@ const server = require('../server.js')
 const request = supertest(server)
 
 jest.mock('../recommendChampionLogic');
-jest.mock('../followrRoute.js');
 
 describe('GET/', function(){
 

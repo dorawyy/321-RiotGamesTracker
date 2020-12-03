@@ -4,13 +4,13 @@ const {spawn} = require('child_process');
 const followrRouter = express.Router();
 
  // import Follower Schema
- const Follower = require('./model/FollowerSchema');
- const mongoose = require('mongoose');
- var uristring =  'mongodb://localhost:27017/RiotDB';
+const Follower = require('./model/FollowerSchema');
+const mongoose = require('mongoose');
+var uristring =  'mongodb://localhost:27017/RiotDB';
  
 // connect to mongoDB
 
- mongoose.connect(uristring,{ useNewUrlParser: true, useUnifiedTopology: true }, function (err, res) {
+mongoose.connect(uristring,{ useNewUrlParser: true, useUnifiedTopology: true }, function (err, res) {
     if (err) {
     console.log ('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
@@ -18,15 +18,13 @@ const followrRouter = express.Router();
     }
   });
 
- mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 
- 
-const checkActiveGamesInterval = 1500;
+const checkActiveGamesInterval = 150000;
 
 followrRouter.post('/follow', async (req, res) => {
     var dataToSend = "";
 
-    //let name = req.query.name
     let deviceId = req.body.device
     let name = req.query.name
     
@@ -37,8 +35,7 @@ followrRouter.post('/follow', async (req, res) => {
         });
         await Follower.updateOne(
             { _id: name }, 
-            { $push: { followers: deviceId } }
-            ).then();
+            { $push: { followers: deviceId } } ).then();
     } else {
         if(q.followers.includes(deviceId)){
             await Follower.updateOne(
@@ -47,6 +44,10 @@ followrRouter.post('/follow', async (req, res) => {
             ).then(function(f){
                 res.send(false)
             });
+            if(query.followers == undefined) {
+                await Follower.deleteOne(
+                    { _id: name }).then();
+            }
         } else {
             await Follower.updateOne(
             { _id: name }, 
@@ -56,7 +57,7 @@ followrRouter.post('/follow', async (req, res) => {
             });
         }
     }
-
+    checkActiveGames()
 })
 
 followrRouter.get('/checkFollowing', async (req, res) => {
@@ -73,22 +74,26 @@ followrRouter.get('/checkFollowing', async (req, res) => {
     }
 })
 
-function checkActiveGames(){
+async function checkActiveGames(){
     //iterate through the database and check if each summoner is in game
     //You can call checkSummonerInGame with the summoner name, database should hold name and deviceId;
+    
+    //var query = await Follower.find().then(console.log("done"));
+
+    // for await (const doc of Follower.find()) {     
+    //   }
+
+    console.log("Check Active Games")
+
+    const cursor = Follower.find().cursor();
+
+    for (let doc = cursor; doc != null; doc = await cursor.next()) {
+        if (doc._id != undefined) {
+            checkSummonerInGame(doc._id)
+        }
+    }
+    
 }
-
-followrRouter.get('/testInGame', (req, res) => {
-
-    var dataToSend = "";
-
-    let name = req.query.name
-    let searchDepth = req.query.games
-    checkSummonerInGame(name)
-
-    // console.log("FollowResult", followResult)
-    // console.log("result", result)
-})
 
 // Run this function on everyone in the database on the set interval
 function checkSummonerInGame(name)
@@ -124,22 +129,15 @@ function checkSummonerInGame(name)
         {
             console.log("Inside dataToSendFalse")
             var query = await Follower.findById(name).then(console.log("done"));
-            console.log(query)
             console.log("Query done")
             var i = 1;
             while (query.followers[i] != null)
             {
-                // Iterate through follower list
-                // Send push notifcation to each one in follower list if they are in game
-                // using sendNotification
-                console.log("query.followers[i] != null");
-                console.log(query.followers[i] != null);
                 sendNotification("Player in Game", " ..Player is resting... ", query.followers[i]);
                 i++;
                 
             }
         }
-
     });
 
     // console.log(dataToSend);
@@ -178,6 +176,5 @@ function sendNotification(title, body, deviceID) {
         console.log('Error sending message:', error);
       });
 }
-
 
 module.exports = followrRouter;
