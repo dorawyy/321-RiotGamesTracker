@@ -21,7 +21,7 @@ describe('GET/', function(){
         expect(JSON.parse(response.text).Summoner.name).toBe('Gunner62')
         done()
         });
-    
+        
      test('profile', async done =>{
         jest.setTimeout(10000);
         const response = await request.get('/profile?name=gunner62')
@@ -67,11 +67,24 @@ describe('GET/', function(){
                 const Mockresp = {
                     status:404
                 }
-                request.get = jest.fn().mockResolvedValue(Mockresp)
+                request.get = jest.fn().mockResolvedValueOnce(Mockresp)
     
                 const responseProfile = await request.get('/profile?name=gunner62')
                 expect(responseProfile).toBe(Mockresp);
                 expect(responseProfile.status).toBe(404);
+                expect(request.get).toHaveBeenCalledTimes(1);
+                done()
+                });
+
+        test('Recommend endpoint', async done =>{
+
+                jest.setTimeout(10000);
+    
+                const Mockresp = "pelter"
+                request.get = jest.fn().mockResolvedValueOnce(Mockresp)
+    
+                const responseProfile = await request.get('/recommend?name=Gunner62&games=20')
+                expect(responseProfile).toBe(Mockresp);
                 expect(request.get).toHaveBeenCalledTimes(1);
                 done()
                 });
@@ -81,11 +94,9 @@ describe('GET/', function(){
            jest.setTimeout(10000);
            expect.assertions(1);
 
-           const Mockresp = "brawler";
-
-           const response = await request.get('/recommend?name=gunner62&games=20')
-           // console.log(response);
-           expect(response).toBe(Mockresp);
+           const response = await request.get('/recommend?name=Gunner62&games=20')
+           console.log(response);
+           expect(response).toBe(undefined);
            done()
            });
 
